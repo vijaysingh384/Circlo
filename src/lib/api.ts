@@ -7,8 +7,14 @@ import type {
   ApiError,
 } from '../types';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || 'https://circlo-api.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
+
+// Debug log for development
+if (import.meta.env.DEV) {
+  console.log('🔧 API Configuration:');
+  console.log('  VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+  console.log('  Using API_BASE_URL:', API_BASE_URL);
+}
 
 class ApiClient {
   private async request<T>(
