@@ -12,6 +12,7 @@ import './config/mongoose-connection.js';
 import Database from './lib/database.js';
 import LocalStorage from './lib/storage.js';
 import { initializeSocket } from './lib/socket.js';
+import { CleanupService } from './lib/cleanup.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -23,6 +24,10 @@ await storage.init();
 
 // Initialize Socket.IO
 const io = initializeSocket(httpServer);
+
+// Initialize Cleanup Service (auto-delete photos after 1 hour)
+const cleanupService = new CleanupService(db, storage);
+cleanupService.start();
 
 // Make db, storage, and io available to routes
 app.locals.db = db;
@@ -53,8 +58,8 @@ app.use(
   })
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1mb' })); // Limit JSON payload size
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 app.use(express.static(path.join(process.cwd(), 'public')));
 

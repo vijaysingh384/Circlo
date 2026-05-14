@@ -1,25 +1,30 @@
 import { Router } from 'express';
 import { randomUUID } from 'crypto';
 import { streamZip } from '../lib/zip.js';
+import { validateEventName } from '../middleware/validation.js';
+
 const router = Router();
 // POST /api/events - Create a new event
 router.post('/events', async (req, res) => {
     const db = req.app.locals.db;
     const { name, joinCode } = req.body;
-    // Validate name is non-empty/non-whitespace
-    if (!name || typeof name !== 'string' || name.trim() === '') {
+    
+    // Validate event name
+    const nameValidation = validateEventName(name);
+    if (!nameValidation.valid) {
         return res.status(400).json({
             error: 'INVALID_EVENT_NAME',
-            message: 'Event name must be a non-empty string',
+            message: nameValidation.error,
         });
     }
+    
     try {
         const eventId = randomUUID();
         const hostToken = randomUUID();
         const createdAt = new Date().toISOString();
         const event = await db.createEvent({
             eventId,
-            name: name.trim(),
+            name: nameValidation.sanitized,
             joinCode,
             hostToken,
             createdAt,

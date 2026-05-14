@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { randomUUID } from 'crypto';
 import { upload } from '../middleware/upload.js';
+import { validateUpload, validateUserName } from '../middleware/validation.js';
 import { emitPhotoUploaded, emitPhotoDeleted, emitEventStats } from '../lib/socket.js';
 
 const router = Router();
@@ -41,18 +42,30 @@ router.get('/events/:eventId/photos', async (req, res) => {
     }
 });
 // POST /api/events/:eventId/photos - Upload a photo
-router.post('/events/:eventId/photos', upload.single('photo'), async (req, res) => {
+router.post('/events/:eventId/photos', upload.single('photo'), validateUpload, async (req, res) => {
     const db = req.app.locals.db;
     const storage = req.app.locals.storage;
     const { eventId } = req.params;
     const sessionToken = req.headers['x-session-token'];
     const uploadedByName = req.body.uploadedByName || 'Anonymous';
+
+    // Validate session token
     if (!sessionToken) {
         return res.status(400).json({
             error: 'MISSING_SESSION_TOKEN',
             message: 'x-session-token header is required',
         });
     }
+
+    // Validate user name
+    const nameValidation = validateUserName(uploadedByName);
+    if (!nameValidation.valid) {
+        return res.status(400).json({
+            error: 'INVALID_USER_NAME',
+            message: nameValidation.error,
+        });
+    }
+
     if (!req.file) {
         return res.status(400).json({
             error: 'NO_FILE',

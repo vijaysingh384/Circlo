@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../lib/api';
 import { setHostToken, generateToken } from '../lib/tokens';
+import { validateEventName } from '../lib/validation';
 
 const sampleEvents = [
   {
@@ -143,8 +144,10 @@ export function HomePage() {
     setError('');
     setLoading(true);
 
-    if (!eventName.trim()) {
-      setError('Event name is required');
+    // Validate event name
+    const validation = validateEventName(eventName);
+    if (!validation.valid) {
+      setError(validation.error || 'Invalid event name');
       setLoading(false);
       return;
     }

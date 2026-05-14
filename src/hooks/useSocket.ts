@@ -1,21 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import type { UseSocketOptions, UseSocketReturn } from '../types';
 
 const SOCKET_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
-interface UseSocketOptions {
-  eventId: string;
-  userName?: string;
-  onPhotoUploaded?: (photo: any) => void;
-  onPhotoDeleted?: (data: { photoId: string }) => void;
-  onUserJoined?: (data: { userName: string; timestamp: string }) => void;
-  onUserLeft?: (data: { userName: string; timestamp: string }) => void;
-  onUsersOnline?: (data: { count: number }) => void;
-  onUploadStarted?: (data: { userName: string; fileCount: number; timestamp: string }) => void;
-  onEventStats?: (stats: { photoCount: number }) => void;
-}
-
-export function useSocket(options: UseSocketOptions) {
+export function useSocket(options: UseSocketOptions): UseSocketReturn {
   const socketRef = useRef<Socket | null>(null);
   const {
     eventId,

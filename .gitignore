@@ -26,3 +26,4 @@ dist-ssr
 # Uploads folder (user-generated content)
 app/public/uploads/*
 !app/public/uploads/.gitkeep
+.env

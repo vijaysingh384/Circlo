@@ -46,6 +46,12 @@ class Database {
   async deletePhoto(photoId) {
     await Photo.deleteOne({ photoId });
   }
+
+  // Get all photos (for cleanup service)
+  async getAllPhotos() {
+    const photos = await Photo.find({}).sort({ uploadedAt: -1 });
+    return photos.map(photo => photo.toObject());
+  }
 }
 
 export default Database;
