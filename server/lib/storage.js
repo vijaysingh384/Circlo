@@ -6,6 +6,8 @@ class LocalStorage {
   constructor(uploadDir = 'public/uploads') {
     this.uploadDir = path.resolve(uploadDir); // always absolute
     this.publicRoot = path.resolve('public');  // Express static root
+    // Get backend URL from environment or default to localhost:3001
+    this.backendUrl = process.env.BACKEND_URL || 'http://localhost:3001';
   }
 
   async init() {
@@ -21,9 +23,11 @@ class LocalStorage {
 
   /** Convert an absolute disk path to a public URL */
   _toUrl(absolutePath) {
-    // Get path relative to the public/ root, then prefix with /
+    // Get path relative to the public/ root, then prefix with backend URL
     const rel = path.relative(this.publicRoot, absolutePath);
-    return '/' + rel.replace(/\\/g, '/');
+    const relativePath = '/' + rel.replace(/\\/g, '/');
+    // Return absolute URL with backend origin
+    return this.backendUrl + relativePath;
   }
 
   async save({ buffer, thumbnail, fileName, mimeType, eventId }) {
