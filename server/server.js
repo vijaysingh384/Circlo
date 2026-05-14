@@ -35,17 +35,25 @@ app.locals.storage = storage;
 app.locals.io = io;
 
 // CORS configuration - allow multiple origins
+// CORS configuration - allow multiple origins
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:5174",
   "http://localhost:3000",
-  "https://circlo-4bw80il17-vijaysingh384s-projects.vercel.app"
 ];
 
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+
+    // Allow any Vercel preview/production deployment for this project
+    const isVercel = /^https:\/\/circlo(-[a-z0-9]+)*(-vijaysingh384s-projects)?\.vercel\.app$/.test(origin);
+
+    if (allowedOrigins.includes(origin) || isVercel) {
       callback(null, true);
     } else {
+      console.warn(`CORS blocked: ${origin}`);
       callback(new Error("CORS blocked"));
     }
   },
