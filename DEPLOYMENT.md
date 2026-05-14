@@ -153,6 +153,7 @@ To use custom domains:
 - Check logs in Render dashboard
 - Verify MongoDB connection string is correct
 - Ensure all environment variables are set
+- **Case sensitivity**: Linux is case-sensitive for file names. Ensure import paths match exact file names (e.g., `Events.js` not `events.js`)
 
 ### Frontend can't connect to backend
 - Verify `VITE_API_BASE_URL` is set correctly
@@ -168,6 +169,11 @@ To use custom domains:
 - Ensure WebSocket connections are allowed
 - Check browser console for connection errors
 - Verify backend URL is accessible
+
+### Module not found errors
+- Ensure all import paths use correct case (Linux is case-sensitive)
+- Check that all route files exist in the correct location
+- Verify file extensions are included in imports (.js)
 
 ## Upgrading to Paid Plans
 

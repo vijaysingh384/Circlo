@@ -39,6 +39,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:3000',
+  'https://circlo1.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -51,8 +52,13 @@ app.use(
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
+        console.log('CORS blocked origin:', origin);
         callback(new Error('Not allowed by CORS'));
       }
+    },
+    credentials: true,
+  })
+);
     },
     credentials: true,
   })

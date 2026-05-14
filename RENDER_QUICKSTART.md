@@ -90,6 +90,8 @@ Consider upgrading to:
 **Backend won't start?**
 - Check MongoDB connection string
 - Verify all environment variables are set
+- Check Render logs for specific errors
+- **Linux is case-sensitive**: Ensure import paths match exact file names
 
 **Frontend can't connect?**
 - Verify `VITE_API_BASE_URL` matches your backend URL
@@ -98,6 +100,10 @@ Consider upgrading to:
 **Photos not showing?**
 - Verify `BACKEND_URL` environment variable is set
 - Check browser console for errors
+
+**Module not found errors?**
+- File imports are case-sensitive on Linux
+- Check that route file names match imports exactly
 
 ## 📚 Need More Help?
 
