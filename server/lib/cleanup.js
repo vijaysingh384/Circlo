@@ -62,8 +62,13 @@ export class CleanupService {
         // Check if photo is older than 1 hour
         if (uploadedAt < expirationTime) {
           try {
-            // Delete from storage
-            await this.storage.delete(photo.storagePath);
+            // Delete from storage (Cloudinary or local)
+            if (photo.storageProvider === 'cloudinary') {
+              await this.storage.deletePhoto(photo.cloudinaryPublicId, photo.cloudinaryThumbnailPublicId);
+            } else {
+              // Fallback for local storage
+              await this.storage.delete(photo.storagePath, photo.thumbnailPath);
+            }
             
             // Delete from database
             await this.db.deletePhoto(photo.photoId);
@@ -87,8 +92,10 @@ export class CleanupService {
         console.log(`⚠️  ${errorCount} photo(s) failed to delete`);
       }
 
-      // Also cleanup empty event directories
-      await this.cleanupEmptyDirectories();
+      // Only cleanup empty directories if using local storage
+      if (this.storage.constructor.name !== 'CloudinaryStorage') {
+        await this.cleanupEmptyDirectories();
+      }
       
     } catch (err) {
       console.error('❌ Cleanup service error:', err);

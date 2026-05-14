@@ -10,7 +10,7 @@ import photosRouter from './routes/Photos.js';
 
 import './config/mongoose-connection.js';
 import Database from './lib/database.js';
-import LocalStorage from './lib/storage.js';
+import CloudinaryStorage from './lib/cloudinaryStorage.js';
 import { initializeSocket } from './lib/socket.js';
 import { CleanupService } from './lib/cleanup.js';
 
@@ -19,7 +19,9 @@ const httpServer = createServer(app);
 
 // Initialize database and storage
 const db = new Database();
-const storage = new LocalStorage('public/uploads');
+
+// Use Cloudinary storage (cloud) or fallback to local storage
+const storage = new CloudinaryStorage();
 await storage.init();
 
 // Initialize Socket.IO
@@ -63,7 +65,10 @@ app.use(cors({
 app.use(express.json({ limit: '1mb' })); // Limit JSON payload size
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
-app.use(express.static(path.join(process.cwd(), 'public')));
+// Serve static files from public directory
+const publicPath = path.join(process.cwd(), 'public');
+console.log('📁 Serving static files from:', publicPath);
+app.use(express.static(publicPath));
 
 // Health check endpoint for Render
 app.get('/health', (req, res) => {

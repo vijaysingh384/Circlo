@@ -31,6 +31,8 @@ Circlo is a simple, real-time photo sharing application for events. No accounts,
 - **Mongoose** - MongoDB ODM
 - **Socket.IO** - Real-time WebSocket server
 - **Multer** - File upload handling
+- **Sharp** - Image optimization and thumbnail generation
+- **Cloudinary** - Cloud photo storage
 - **Archiver** - ZIP file generation
 
 ## 📁 Project Structure
@@ -116,7 +118,18 @@ circlo/
    PORT=3001
    MONGODB_URI=mongodb://localhost:27017/circlo
    FRONTEND_URL=http://localhost:5173
+   BACKEND_URL=http://localhost:3001
+   
+   # Cloudinary (required for photo storage)
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
    ```
+   
+   **Get Cloudinary credentials:**
+   - Sign up for free at [cloudinary.com](https://cloudinary.com)
+   - Go to Dashboard → Account Details
+   - Copy Cloud Name, API Key, and API Secret
 
 4. **Start MongoDB**
    ```bash
@@ -341,6 +354,9 @@ Circlo is optimized for deployment on [Render](https://render.com) with:
    MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/circlo
    BACKEND_URL=https://circlo-api.onrender.com
    FRONTEND_URL=https://circlo-frontend.onrender.com
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
    ```
    
    **Frontend (circlo-frontend):**
@@ -394,6 +410,23 @@ Circlo is optimized for deployment on [Render](https://render.com) with:
 4. Get your connection string
 5. Update `MONGODB_URI` in your environment variables
 
+### Cloudinary Setup
+
+1. Sign up for free at [Cloudinary](https://cloudinary.com)
+2. Go to Dashboard → Account Details
+3. Copy your credentials:
+   - Cloud Name
+   - API Key
+   - API Secret
+4. Add them to your environment variables
+
+**Why Cloudinary?**
+- ✅ Free tier: 25GB storage, 25GB bandwidth/month
+- ✅ Automatic image optimization
+- ✅ CDN delivery for fast loading
+- ✅ Persistent storage (photos don't disappear on server restart)
+- ✅ Automatic thumbnail generation
+
 ### Health Check
 
 After deployment, verify your backend is running:
@@ -434,6 +467,12 @@ VITE_API_URL=http://localhost:3001
 PORT=3001
 MONGODB_URI=mongodb://localhost:27017/circlo
 FRONTEND_URL=http://localhost:5173
+BACKEND_URL=http://localhost:3001
+
+# Cloudinary (required)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
 ## 🤝 Contributing

@@ -91,26 +91,27 @@ router.post('/events/:eventId/photos', upload.single('photo'), optimizeImage, va
                 message: `Maximum ${UPLOAD_LIMIT} photos per session`,
             });
         }
-        // Save file to storage (with thumbnail)
-        const { publicUrl, thumbnailUrl, storagePath, thumbnailPath } = await storage.save({
-            buffer: req.file.buffer,
-            thumbnail: req.file.thumbnail,
-            fileName: req.file.originalname,
-            mimeType: req.file.mimetype,
+        // Upload to Cloudinary (with thumbnail)
+        const { publicUrl, thumbnailUrl, publicId, thumbnailPublicId } = await storage.uploadPhoto(
+            req.file.buffer,
             eventId,
-        });
+            req.file.originalname
+        );
+        
         // Persist photo record
         const photoId = randomUUID();
         const photo = await db.createPhoto({
             photoId,
             eventId,
-            storagePath,
-            thumbnailPath,
+            storagePath: publicId, // Store Cloudinary public ID
+            thumbnailPath: thumbnailPublicId, // Store thumbnail public ID
+            cloudinaryPublicId: publicId,
+            cloudinaryThumbnailPublicId: thumbnailPublicId,
             fileName: req.file.originalname,
             fileSize: req.file.size,
             uploadedByName,
             sessionToken,
-            storageProvider: process.env.R2_BUCKET ? 'r2' : 'local',
+            storageProvider: 'cloudinary',
             publicUrl,
             thumbnailUrl,
             uploadedAt: new Date().toISOString(),
@@ -185,8 +186,8 @@ router.delete('/events/:eventId/photos/:photoId', async (req, res) => {
                 message: 'You do not have permission to delete this photo',
             });
         }
-        // Delete from storage (including thumbnail)
-        await storage.delete(photo.storagePath, photo.thumbnailPath);
+        // Delete from Cloudinary (including thumbnail)
+        await storage.deletePhoto(photo.cloudinaryPublicId, photo.cloudinaryThumbnailPublicId);
         // Delete from database
         await db.deletePhoto(photoId);
 

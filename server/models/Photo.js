@@ -37,8 +37,15 @@ const PhotoSchema = new mongoose.Schema({
   },
   storageProvider: {
     type: String,
-    enum: ['local', 'r2'],
-    default: 'local',
+    enum: ['local', 'cloudinary', 'r2'],
+    default: 'cloudinary',
+  },
+  // Cloudinary-specific fields
+  cloudinaryPublicId: {
+    type: String,
+  },
+  cloudinaryThumbnailPublicId: {
+    type: String,
   },
   publicUrl: {
     type: String,
