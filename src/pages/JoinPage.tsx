@@ -71,13 +71,28 @@ export function JoinPage() {
       {/* Header */}
       <header className="relative z-10 w-full px-6 py-5 md:px-12 md:py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+          <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center">
+            <svg
+  className="w-6 h-6 text-white"
+  viewBox="0 0 24 24"
+  fill="none"
+>
+  <path
+    d="M16 7
+       Q13 4 9.5 5.5
+       Q6 7 6 12
+       Q6 17 9.5 18.5
+       Q13 20 16 17"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    fill="none"
+  />
+</svg>
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold tracking-widest uppercase">Circlo</span>
+            <span className="text-sm font-semibold tracking-widest uppercase cursor-pointer " onClick={() => navigate('/')}>Circlo</span>
             <span className="text-[10px] text-zinc-500 font-medium tracking-wider">COLLECT EVERY MOMENT</span>
           </div>
         </div>
@@ -124,7 +139,7 @@ export function JoinPage() {
                 type="text"
                 value={userName}
                 onChange={(e) => setUserName(e.target.value)}
-                placeholder="e.g. John Doe"
+                placeholder=""
                 className="w-full h-14 px-5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-white placeholder:text-zinc-600 outline-none focus:border-white/20 focus:bg-white/[0.05] focus:ring-1 focus:ring-blue-500/50 transition-all"
                 disabled={loading}
               />

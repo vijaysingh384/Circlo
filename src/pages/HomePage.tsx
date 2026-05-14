@@ -90,8 +90,9 @@ const sampleEvents = [
       <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0d1825"></stop>
-            <stop offset="100%" stopColor="#0a1018"></stop>
+           <stop offset="0%" stopColor="#0d1a2e"></stop>
+            <stop offset="65%" stopColor="#162a16"></stop>
+            <stop offset="60%" stopColor="#0c160c"></stop>
           </linearGradient>
         </defs>
         <rect width="200" height="120" fill="url(#g4)"></rect>
@@ -138,7 +139,7 @@ const sampleEvents = [
     ),
   },
   {
-    name: 'NYE 2024',
+    name: 'NYE 2027',
     photos: 89,
     people: 22,
     color: 'pink',
@@ -224,9 +225,10 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white flex flex-col">
       {/* Navbar */}
-      <nav className="relative z-20 flex items-center justify-between px-12 h-16 border-b border-white/5 flex-shrink-0">
-        <div className="flex items-center gap-2.5">
-          <svg width="32" height="32" viewBox="0 0 44 44">
+      <nav className="relative z-20 flex items-center justify-between px-4 sm:px-6 lg:px-12 h-14 sm:h-16 border-b border-white/5 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5" >
+          
+          <svg width="28" height="28" viewBox="0 0 44 44" className="sm:w-8 sm:h-8">
   <rect x="2" y="2" width="40" height="40" rx="10" fill="#3b82f6"/>
   
 
@@ -244,56 +246,56 @@ export function HomePage() {
   />
 </svg>
           <div>
-            <div className="text-sm font-extrabold tracking-[-0.04em] text-white leading-none">CIRCLO</div>
-            <div className="text-[8px] tracking-[0.15em] text-white/30 uppercase mt-0.5">Collect every moment</div>
+            <div className="text-xs sm:text-sm font-extrabold tracking-[-0.04em] text-white leading-none cursor-pointer" onClick={() => navigate('/')}>CIRCLO</div>
+            <div className="text-[7px] sm:text-[8px] tracking-[0.15em] text-white/30 uppercase mt-0.5">Collect every moment</div>
           </div>
         </div>
-        <div className="flex items-center gap-7">
+        <div className="flex items-center gap-3 sm:gap-7">
           <button
             onClick={() => navigate('/join')}
-            className="text-[11px] text-white/30 tracking-[0.1em] uppercase cursor-pointer hover:text-white/50 transition-colors"
+            className="text-[10px] sm:text-[11px] text-white/30 tracking-[0.1em] uppercase cursor-pointer hover:text-white/50 transition-colors"
           >
-            Join event
+            Join
           </button>
-          <div className="w-px h-4 bg-white/8"></div>
+          <div className="w-px h-3 sm:h-4 bg-white/8"></div>
           <button
             onClick={() => {
               const input = document.querySelector('input[type="text"]') as HTMLInputElement;
               if (input) input.focus();
             }}
-            className="relative overflow-hidden bg-blue-500 border-none text-white px-5 py-2 rounded-md text-[11px] font-bold tracking-[0.08em] uppercase cursor-pointer hover:bg-blue-600 transition-colors"
+            className="relative overflow-hidden bg-blue-500 border-none text-white px-3 sm:px-5 py-1.5 sm:py-2 rounded-md text-[10px] sm:text-[11px] font-bold tracking-[0.08em] uppercase cursor-pointer hover:bg-blue-600 transition-colors"
           >
-            Create Event
+            Create
           </button>
         </div>
       </nav>
 
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 grid lg:grid-cols-[460px_1fr] items-center px-6 lg:px-12 gap-0 max-w-[1200px] mx-auto w-full">
+      <main className="relative z-10 flex-1 grid lg:grid-cols-[460px_1fr] items-center px-4 sm:px-6 lg:px-12 gap-8 lg:gap-0 max-w-[1200px] mx-auto w-full py-8 lg:py-0">
         {/* Left Content */}
-        <div className="pr-0 lg:pr-12 py-12">
+        <div className="pr-0 lg:pr-12 py-4 sm:py-8 lg:py-12">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-blue-500/8 border border-blue-500/16 rounded-full px-4 py-1.5 mb-7">
+          <div className="inline-flex items-center gap-2 bg-blue-500/8 border border-blue-500/16 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 mb-5 sm:mb-7">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_5px_rgba(59,130,246,1)]"></div>
-            <span className="text-[10px] text-blue-400/90 tracking-[0.1em] uppercase font-semibold whitespace-nowrap">
+            <span className="text-[9px] sm:text-[10px] text-blue-400/90 tracking-[0.1em] uppercase font-semibold whitespace-nowrap">
               Free · No account needed
             </span>
           </div>
 
           {/* Title */}
-          <h1 className="text-5xl font-black tracking-[-0.05em] text-white leading-[1.02] mb-5">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-[-0.05em] text-white leading-[1.02] mb-4 sm:mb-5">
             The photos you<br />almost never got.
           </h1>
 
           {/* Description */}
-          <p className="text-[15px] text-white/38 leading-[1.85] mb-9 max-w-[360px]">
+          <p className="text-sm sm:text-[15px] text-white/38 leading-[1.85] mb-6 sm:mb-9 max-w-[360px]">
             Create an event. Share the link.<br />
             Everyone uploads. One gallery — yours to keep.
           </p>
 
           {/* Form Label */}
-          <div className="text-[10px] text-white/22 tracking-[0.1em] uppercase mb-2">
+          <div className="text-[9px] sm:text-[10px] text-white/22 tracking-[0.1em] uppercase mb-2">
             What are you celebrating?
           </div>
 
@@ -304,14 +306,14 @@ export function HomePage() {
                 type="text"
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
-                placeholder="Manali Trip, Birthday Photos..."
-                className="flex-1 px-5 py-3.5 bg-white/[0.03]  border-none text-white text-[13px] outline-none min-w-0"
+                placeholder="Manali Trip, Birthday..."
+                className="flex-1 px-3 sm:px-5 py-2.5 sm:py-3.5 bg-white/[0.03] border-none text-white text-xs sm:text-[13px] outline-none min-w-0"
                 disabled={loading}
               />
               <button
                 type="submit"
                 disabled={loading || !eventName.trim()}
-                className="bg-white/5 border-l border-white/8 text-white/25 px-5 py-3.5 text-[10px] font-extrabold tracking-[0.1em] uppercase cursor-pointer disabled:cursor-not-allowed whitespace-nowrap transition-all hover:bg-white/10 hover:text-white/50 disabled:hover:bg-white/5 disabled:hover:text-white/25"
+                className="bg-white/5 border-l border-white/8 text-white/25 px-3 sm:px-5 py-2.5 sm:py-3.5 text-[9px] sm:text-[10px] font-extrabold tracking-[0.1em] uppercase cursor-pointer disabled:cursor-not-allowed whitespace-nowrap transition-all hover:bg-white/10 hover:text-white/50 disabled:hover:bg-white/5 disabled:hover:text-white/25"
               >
                 {loading ? 'Creating...' : 'Create →'}
               </button>
@@ -323,50 +325,50 @@ export function HomePage() {
           </form>
 
           {/* Features */}
-          <div className="flex items-center gap-5 mt-5 flex-wrap">
+          <div className="flex items-center gap-3 sm:gap-5 mt-4 sm:mt-5 flex-wrap">
             <div className="flex items-center gap-1.5">
-              <svg width="13" height="13" viewBox="0 0 13 13">
+              <svg width="12" height="12" viewBox="0 0 13 13" className="sm:w-[13px] sm:h-[13px]">
                 <circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="rgba(59,130,246,0.35)" strokeWidth="1"></circle>
                 <path d="M4,6.5 L5.5,8 L9,5" stroke="#3b82f6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"></path>
               </svg>
-              <span className="text-[11px] text-white/28">No account</span>
+              <span className="text-[10px] sm:text-[11px] text-white/28">No account</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <svg width="13" height="13" viewBox="0 0 13 13">
+              <svg width="12" height="12" viewBox="0 0 13 13" className="sm:w-[13px] sm:h-[13px]">
                 <circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="rgba(59,130,246,0.35)" strokeWidth="1"></circle>
                 <path d="M4,6.5 L5.5,8 L9,5" stroke="#3b82f6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"></path>
               </svg>
-              <span className="text-[11px] text-white/28">Free forever</span>
+              <span className="text-[10px] sm:text-[11px] text-white/28">Free forever</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <svg width="13" height="13" viewBox="0 0 13 13">
+              <svg width="12" height="12" viewBox="0 0 13 13" className="sm:w-[13px] sm:h-[13px]">
                 <circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="rgba(59,130,246,0.35)" strokeWidth="1"></circle>
                 <path d="M4,6.5 L5.5,8 L9,5" stroke="#3b82f6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"></path>
               </svg>
-              <span className="text-[11px] text-white/28">Share via QR</span>
+              <span className="text-[10px] sm:text-[11px] text-white/28">Share via QR</span>
             </div>
-            <div className="w-px h-3 bg-white/8"></div>
-            <span className="text-[11px] text-blue-500/60">
+            <div className="w-px h-3 bg-white/8 hidden sm:block"></div>
+            <span className="text-[10px] sm:text-[11px] text-blue-500/60">
               {photosSharedToday.toLocaleString()} photos shared today
             </span>
           </div>
         </div>
 
         {/* Right Content - Card Grid */}
-        <div className="py-12">
-          <div className="grid grid-cols-2 gap-3 max-w-[420px] mx-auto">
+        <div className="py-4 sm:py-8 lg:py-12">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 max-w-[420px] mx-auto">
             {sampleEvents.map((event, index) => (
               <div
                 key={index}
-                className="rounded-xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.7)] transition-all hover:scale-105 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] cursor-pointer"
+                className="rounded-lg sm:rounded-xl overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.6)] sm:shadow-[0_16px_40px_rgba(0,0,0,0.7)] transition-all hover:scale-105 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] cursor-pointer"
               >
                 <div className="overflow-hidden">
                   {event.icon}
                 </div>
-                <div className="bg-[#0d1421] border-t border-blue-500/8 px-3 py-2.5 flex items-center justify-between">
+                <div className="bg-[#0d1421] border-t border-blue-500/8 px-2 sm:px-3 py-2 sm:py-2.5 flex items-center justify-between">
                   <div>
-                    <div className="text-[10px] font-bold text-white/88">{event.name}</div>
-                    <div className="text-[8px] text-white/25 mt-0.5">
+                    <div className="text-[9px] sm:text-[10px] font-bold text-white/88">{event.name}</div>
+                    <div className="text-[7px] sm:text-[8px] text-white/25 mt-0.5">
                       {event.photos} photos · {event.people} people
                     </div>
                   </div>

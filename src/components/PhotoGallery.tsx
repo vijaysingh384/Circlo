@@ -33,11 +33,11 @@ export function PhotoGallery({
   return (
     <div>
       {/* Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-4 sm:mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold">Gallery</h2>
+          <h2 className="text-lg sm:text-xl font-bold">Gallery</h2>
 
-          <p className="mt-1 text-xs uppercase tracking-widest text-zinc-500">
+          <p className="mt-1 text-[10px] sm:text-xs uppercase tracking-widest text-zinc-500">
             {photos.length} {photos.length === 1 ? 'Photo' : 'Photos'}
           </p>
         </div>
@@ -45,7 +45,7 @@ export function PhotoGallery({
         {selectedPhotos.size > 0 && (
           <button
             onClick={onClearSelection}
-            className="text-sm text-zinc-400 hover:text-white"
+            className="text-xs sm:text-sm text-zinc-400 hover:text-white"
           >
             Clear ({selectedPhotos.size})
           </button>
@@ -53,14 +53,14 @@ export function PhotoGallery({
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
         {photos.map((photo) => {
           const isSelected = selectedPhotos.has(photo.photoId);
 
           return (
             <div
               key={photo.photoId}
-              className={`group relative overflow-hidden rounded-xl border bg-zinc-900/50 transition hover:scale-[1.02] ${
+              className={`group relative overflow-hidden animation: 0.6s ease 0.3s 1 normal forwards running fadeup rounded-xl border bg-zinc-900/50 transition hover:scale-[1.02] ${
                 isSelected
                   ? 'border-indigo-500'
                   : 'border-transparent hover:border-zinc-700'
@@ -76,23 +76,23 @@ export function PhotoGallery({
 
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-                <div className="absolute bottom-0 w-full p-3 text-white">
-                  <p className="truncate text-xs font-semibold">
+                <div className="absolute bottom-0 w-full p-2 sm:p-3 text-white">
+                  <p className="truncate text-[10px] sm:text-xs font-semibold">
                     {photo.uploadedByName}
                   </p>
 
-                  <p className="text-xs text-zinc-300">
+                  <p className="text-[10px] sm:text-xs text-zinc-300">
                     {new Date(photo.uploadedAt).toLocaleDateString()}
                   </p>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="absolute right-2 top-2 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+              {/* Actions - Always visible on mobile, hover on desktop */}
+              <div className="absolute right-1.5 sm:right-2 top-1.5 sm:top-2 flex gap-1.5 sm:gap-2 opacity-100 sm:opacity-0 transition-opacity group-hover:opacity-100">
                 
                 <button
                   onClick={() => onToggleSelection(photo.photoId)}
-                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm ${
+                  className={`flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg text-xs sm:text-sm ${
                     isSelected
                       ? 'bg-indigo-600 text-white'
                       : 'bg-black/60 text-white'
@@ -104,7 +104,7 @@ export function PhotoGallery({
                 {(isHost || photo.sessionToken === sessionToken) && (
                   <button
                     onClick={() => onDelete(photo.photoId)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/80 text-white hover:bg-red-500"
+                    className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-red-500/80 text-white hover:bg-red-500"
                   >
                     ✕
                   </button>

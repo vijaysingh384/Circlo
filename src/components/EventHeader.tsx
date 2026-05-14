@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { CreepyButton } from './CreepyButton';
 
 interface EventHeaderProps {
   eventName: string;
@@ -26,13 +27,13 @@ export function EventHeader({
 
   return (
     <header className="sticky top-0 z-10 py-0 border-b border-white/5 bg-[#0b1120]/80 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between px-4 sm:px-6 py-3 sm:py-4 gap-3 sm:gap-0">
         
         {/* Left */}
-        <div>
-          <h1 className="text-2xl uppercase font-bold">{eventName}</h1>
+        <div className="w-full sm:w-auto">
+          <h1 className="text-xl sm:text-2xl uppercase font-bold truncate">{eventName}</h1>
 
-          <div className="mt-1 flex items-center gap-4 text-sm text-gray-400">
+          <div className="mt-1 flex items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-400">
             <p>
               {photoCount} {photoCount === 1 ? 'photo' : 'photos'}
             </p>
@@ -45,38 +46,43 @@ export function EventHeader({
         </div>
 
         {/* Right */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
           
           {isHost && (
-            <button
-              onClick={onShowQR}
-              className={`${buttonClass} border border-indigo-500/30 bg-indigo-600/20 text-indigo-300 hover:bg-indigo-600/30`}
-            >
-              Share QR
-            </button>
+            <div style={{ 
+              '--cb-primary5': '#6366f1', 
+              '--cb-primary6': '#4f46e5',
+              '--cb-primary3': '#a5b4fc' 
+            } as React.CSSProperties}>
+              <CreepyButton onClick={onShowQR}>
+                Share QR
+              </CreepyButton>
+            </div>
           )}
 
           {selectedPhotosCount > 0 && (
             <button
               onClick={onDownloadSelected}
-              className={`${buttonClass} bg-indigo-600 hover:bg-indigo-500`}
+              className={`${buttonClass} bg-indigo-600 hover:bg-indigo-500 text-xs sm:text-sm whitespace-nowrap`}
             >
-              Download Selected ({selectedPhotosCount})
+              <span className="hidden sm:inline">Download Selected ({selectedPhotosCount})</span>
+              <span className="sm:hidden">Selected ({selectedPhotosCount})</span>
             </button>
           )}
 
           {photoCount > 0 && (
             <button
               onClick={onDownloadAll}
-              className={`${buttonClass} border border-white/5 bg-zinc-900 hover:bg-zinc-800`}
+              className={`${buttonClass} border border-white/5 bg-zinc-900 hover:bg-zinc-800 text-xs sm:text-sm whitespace-nowrap`}
             >
-              Download All
+              <span className="hidden sm:inline">Download All</span>
+              <span className="sm:hidden">All</span>
             </button>
           )}
 
           <button
             onClick={() => navigate('/')}
-            className={`${buttonClass} border border-white/5 bg-zinc-900 hover:bg-zinc-800`}
+            className={`${buttonClass} border border-white/5 bg-zinc-900 hover:bg-zinc-800 text-xs sm:text-sm whitespace-nowrap`}
           >
             ← Back
           </button>

@@ -237,7 +237,7 @@ export function EventPage() {
 
       {onlineUsers > 0 && (
         <div className="bg-[#0b1120] border-b border-white/5">
-          <div className="max-w-7xl mx-auto px-6 py-2 text-sm text-gray-400 flex items-center gap-2">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 text-xs sm:text-sm text-gray-400 flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span>
               {onlineUsers} {onlineUsers === 1 ? 'person' : 'people'} viewing
@@ -254,7 +254,7 @@ export function EventPage() {
         onCopyLink={copyShareLink}
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <UploadSection
           userName={userName}
           onUserNameChange={setUserName}
