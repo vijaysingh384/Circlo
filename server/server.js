@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
   res.send('Circlo API Server');
 });
 
-app.use('/api/events', eventsRouter);
+app.use('/api', eventsRouter);
 app.use('/api', photosRouter);
 
 const PORT = process.env.PORT || 3001;
