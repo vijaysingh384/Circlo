@@ -47,7 +47,7 @@ app.use(cors({
   origin: [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://circlo-omega.vercel.app/"
+    "https://circlo-3hzhb65qs-vijaysingh384s-projects.vercel.app"
   ],
   credentials: true
 }));
