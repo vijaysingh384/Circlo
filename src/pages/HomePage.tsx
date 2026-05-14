@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { QRCodeSVG } from 'qrcode.react';
 import { api } from '../lib/api';
 import { setHostToken, generateToken } from '../lib/tokens';
 
@@ -12,12 +11,26 @@ const sampleEvents = [
     color: 'emerald',
     gradient: 'from-[#1a2521] to-[#0b1120]',
     icon: (
-      <div className="absolute bottom-0 inset-x-0 h-16 flex items-end justify-center">
-        <div className="w-full h-full opacity-20 flex gap-0 px-2">
-          <div className="w-0 h-0 border-l-[30px] border-l-transparent border-r-[30px] border-r-transparent border-b-[40px] border-b-emerald-500"></div>
-          <div className="w-0 h-0 border-l-[40px] border-l-transparent border-r-[40px] border-r-transparent border-b-[60px] border-b-emerald-600 -ml-8"></div>
-          <div className="w-0 h-0 border-l-[35px] border-l-transparent border-r-[35px] border-r-transparent border-b-[50px] border-b-emerald-400 -ml-6"></div>
-        </div>
+      <div style={{ overflow: 'hidden' }}>
+        <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#0d1a2e"></stop>
+              <stop offset="55%" stopColor="#162a16"></stop>
+              <stop offset="100%" stopColor="#0c160c"></stop>
+            </linearGradient>
+          </defs>
+          <rect width="300" height="120" fill="url(#g1)"></rect>
+          <circle cx="165" cy="16" r="9" fill="rgba(255,240,200,0.1)"></circle>
+          <circle cx="18" cy="10" r="1.5" fill="rgba(255,255,255,0.5)"></circle>
+          <circle cx="52" cy="7" r="1" fill="rgba(255,255,255,0.4)"></circle>
+          <circle cx="88" cy="14" r="1" fill="rgba(255,255,255,0.3)"></circle>
+          <circle cx="125" cy="6" r="1.5" fill="rgba(255,255,255,0.4)"></circle>
+          <polygon points="0,120 0,82 22,56 44,72 65,36 90,58 112,44 136,62 158,32 185,50 200,40 200,120" fill="#1c2e1c"></polygon>
+          <polygon points="0,120 0,92 16,78 38,90 60,70 85,84 108,68 132,82 155,64 178,76 200,66 200,120" fill="#0f180f"></polygon>
+          <polygon points="62,36 66,27 70,36" fill="rgba(255,255,255,0.14)"></polygon>
+          <polygon points="155,32 159,23 163,32" fill="rgba(255,255,255,0.1)"></polygon>
+        </svg>
       </div>
     ),
   },
@@ -108,12 +121,8 @@ const sampleEvents = [
 
 export function HomePage() {
   const [eventName, setEventName] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [createdEvent, setCreatedEvent] = useState<{
-    eventId: string;
-    joinCode: string;
-    name: string;
-  } | null>(null);
   const [photosSharedToday, setPhotosSharedToday] = useState(7172);
   const navigate = useNavigate();
 
@@ -132,9 +141,11 @@ export function HomePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     if (!eventName.trim()) {
       setError('Event name is required');
+      setLoading(false);
       return;
     }
 
@@ -144,83 +155,17 @@ export function HomePage() {
       const response = await api.createEvent(eventName.trim(), joinCode);
       
       setHostToken(response.eventId, hostTokenValue);
-      setCreatedEvent(response);
+      
+      // Show loading state for a moment before navigating
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Auto-navigate to the event page
+      navigate(`/event/${response.eventId}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create event');
+      setLoading(false);
     }
   };
-
-  const copyLink = () => {
-    if (createdEvent) {
-      const link = `${window.location.origin}/join?code=${createdEvent.joinCode}`;
-      navigator.clipboard.writeText(link);
-      alert('Link copied to clipboard!');
-    }
-  };
-
-  const openEvent = () => {
-    if (createdEvent) {
-      navigate(`/event/${createdEvent.eventId}`);
-    }
-  };
-
-  if (createdEvent) {
-    const joinLink = `${window.location.origin}/join?code=${createdEvent.joinCode}`;
-
-    return (
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="bg-[#0b1120] border border-white/5 rounded-3xl p-8 shadow-2xl card-inner-shadow">
-          <h2 className="text-3xl font-display font-bold text-center mb-8">
-            Event Ready! 🎉
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="flex flex-col items-center">
-              <div className="bg-white p-4 rounded-xl mb-4">
-                <QRCodeSVG value={joinLink} size={200} />
-              </div>
-              <p className="text-sm text-gray-400 text-center">
-                Scan to join
-              </p>
-            </div>
-
-            <div className="flex flex-col justify-center space-y-6">
-              <div>
-                <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2 font-bold">
-                  Event Name
-                </label>
-                <p className="text-xl font-semibold text-gray-200">{createdEvent.name}</p>
-              </div>
-
-              <div>
-                <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2 font-bold">
-                  Join Code
-                </label>
-                <p className="text-3xl font-mono font-bold text-blue-500">
-                  {createdEvent.joinCode}
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <button
-                  onClick={copyLink}
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-blue-500/20 active:scale-95 text-xs tracking-widest uppercase"
-                >
-                  Copy Share Link
-                </button>
-                <button
-                  onClick={openEvent}
-                  className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-6 rounded-xl transition-all border border-white/20 active:scale-95 text-xs tracking-widest uppercase"
-                >
-                  Open My Event
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <main className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 px-6 lg:px-24 py-12">
@@ -259,10 +204,24 @@ export function HomePage() {
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-blue-500 hover:bg-blue-600 rounded-xl text-xs font-bold tracking-widest transition-all uppercase whitespace-nowrap active:scale-95"
-                
+                disabled={loading || !eventName.trim()}
+                className={`px-6 py-3 rounded-xl text-xs font-bold tracking-widest transition-all uppercase whitespace-nowrap flex items-center gap-2 ${
+                  loading || !eventName.trim()
+                    ? 'bg-gray-700 cursor-not-allowed'
+                    : 'bg-blue-500 hover:bg-blue-600 active:scale-95'
+                }`}
               >
-                Create →
+                {loading ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating...
+                  </>
+                ) : (
+                  'Create →'
+                )}
               </button>
             </div>
             {error && (

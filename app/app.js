@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
+import { createServer } from 'http';
 import cors from 'cors';
 import path from 'path';
 
@@ -10,22 +11,44 @@ import photosRouter from './Routes/Photos.js';
 import './config/mongoose-connection.js';
 import Database from './lib/database.js';
 import LocalStorage from './lib/storage.js';
+import { initializeSocket } from './lib/socket.js';
 
 const app = express();
+const httpServer = createServer(app);
 
 // Initialize database and storage
 const db = new Database();
 const storage = new LocalStorage('public/uploads');
 await storage.init();
 
-// Make db and storage available to routes
+// Initialize Socket.IO
+const io = initializeSocket(httpServer);
+
+// Make db, storage, and io available to routes
 app.locals.db = db;
 app.locals.storage = storage;
+app.locals.io = io;
+
+// CORS configuration - allow multiple origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL
+].filter(Boolean);
 
 app.use(
   cors({
-    origin:
-      process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );
@@ -44,6 +67,7 @@ app.use('/api', photosRouter);
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Socket.IO initialized and ready`);
 });

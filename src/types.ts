@@ -22,12 +22,14 @@ export interface GetEventResponse {
 }
 
 export interface Photo {
-  _id: string;
+  photoId: string;
   eventId: string;
-  filename: string;
+  fileName: string;
+  fileSize: number;
   uploadedByName: string;
+  sessionToken: string;
+  publicUrl: string;
   uploadedAt: string;
-  url: string;
 }
 
 export interface GetPhotosResponse {

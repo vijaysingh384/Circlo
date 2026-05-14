@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { randomUUID } from 'crypto';
 import { upload } from '../middleware/upload.js';
+import { emitPhotoUploaded, emitPhotoDeleted, emitEventStats } from '../lib/socket.js';
+
 const router = Router();
 const UPLOAD_LIMIT = 20;
 // GET /api/events/:eventId/photos - List all photos for an event
@@ -28,7 +30,7 @@ router.get('/events/:eventId/photos', async (req, res) => {
             publicUrl: photo.publicUrl,
             uploadedAt: photo.uploadedAt,
         }));
-        return res.json(publicPhotos);
+        return res.json({ photos: publicPhotos });
     }
     catch (err) {
         console.error('Error fetching photos:', err);
@@ -106,6 +108,14 @@ router.post('/events/:eventId/photos', upload.single('photo'), async (req, res) 
             publicUrl: photo.publicUrl,
             uploadedAt: photo.uploadedAt,
         };
+
+        // Emit socket event for real-time update
+        emitPhotoUploaded(eventId, publicPhoto);
+
+        // Get updated photo count and emit stats
+        const allPhotos = await db.getPhotosByEventId(eventId);
+        emitEventStats(eventId, { photoCount: allPhotos.length });
+
         return res.status(201).json(publicPhoto);
     }
     catch (err) {
@@ -160,6 +170,14 @@ router.delete('/events/:eventId/photos/:photoId', async (req, res) => {
         await storage.delete(photo.storagePath);
         // Delete from database
         await db.deletePhoto(photoId);
+
+        // Emit socket event for real-time update
+        emitPhotoDeleted(eventId, photoId);
+
+        // Get updated photo count and emit stats
+        const allPhotos = await db.getPhotosByEventId(eventId);
+        emitEventStats(eventId, { photoCount: allPhotos.length });
+
         return res.status(200).json({ success: true });
     }
     catch (err) {

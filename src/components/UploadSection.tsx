@@ -1,0 +1,216 @@
+import type { RefObject } from 'react';
+
+interface UploadSectionProps {
+  userName: string;
+  onUserNameChange: (name: string) => void;
+  uploading: boolean;
+  uploadProgress: number;
+  error: string;
+  photoCount: number;
+  eventJoinCode: string;
+  fileInputRef: RefObject<HTMLInputElement | null>;
+  onFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedFiles?: File[];
+  previewUrls?: string[];
+  onUpload?: () => void;
+  onCancelUpload?: () => void;
+  onRemovePreview?: (index: number) => void;
+}
+
+export function UploadSection({
+  userName,
+  onUserNameChange,
+  uploading,
+  uploadProgress,
+  error,
+  photoCount,
+  eventJoinCode,
+  fileInputRef,
+  onFileSelect,
+}: UploadSectionProps) {
+  return (
+    <div className="grid lg:grid-cols-5 gap-8 mb-8">
+      {/* Left: Instructions & Info (2 columns) */}
+      <div className="lg:col-span-2 space-y-6">
+        {/* Requirements Card */}
+        <div className="bg-gradient-to-br from-[#1c1c21]/40 to-[#111114]/40 backdrop-blur-xl border border-white/5 p-6 rounded-2xl">
+          <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+            <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Requirements
+          </h3>
+          <ul className="space-y-4">
+            <li className="flex gap-3">
+              <div className="w-5 h-5 mt-0.5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm text-zinc-300">Enter your name before uploading photos</span>
+            </li>
+            <li className="flex gap-3">
+              <div className="w-5 h-5 mt-0.5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm text-zinc-300">Supported formats: JPG, PNG, GIF, WebP</span>
+            </li>
+            <li className="flex gap-3">
+              <div className="w-5 h-5 mt-0.5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm text-zinc-300">Maximum file size: 10MB per photo</span>
+            </li>
+            <li className="flex gap-3">
+              <div className="w-5 h-5 mt-0.5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm text-zinc-300">Upload multiple photos at once</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Event Info Card */}
+        <div className="p-6 rounded-2xl bg-indigo-900/10 border border-indigo-500/10">
+          <h4 className="text-sm font-semibold text-indigo-300 mb-2">Event Details</h4>
+          <p className="text-xs text-zinc-400 mb-3">Share this event with friends to collect all your memories in one place.</p>
+          <div className="space-y-2 text-xs">
+            <div className="flex justify-between">
+              <span className="text-zinc-500">Total Photos:</span>
+              <span className="text-white font-semibold">{photoCount}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-zinc-500">Join Code:</span>
+              <span className="text-indigo-400 font-mono font-bold">{eventJoinCode}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Your Name Input */}
+        <div className="bg-gradient-to-br from-[#1c1c21]/40 to-[#111114]/40 backdrop-blur-xl border border-white/5 p-6 rounded-2xl">
+          <label className="block text-sm font-semibold text-zinc-300 mb-3">Your Name</label>
+          <input
+            type="text"
+            value={userName}
+            onChange={(e) => onUserNameChange(e.target.value)}
+            placeholder="Enter your name"
+            className="w-full bg-zinc-900/50 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all text-white placeholder:text-zinc-600"
+          />
+          <p className="text-xs text-zinc-500 mt-2">This will be shown with your uploaded photos</p>
+        </div>
+      </div>
+
+      {/* Right: Upload Area (3 columns) */}
+      <div className="lg:col-span-3 space-y-6">
+        {/* Dropzone */}
+        <div className="relative">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={onFileSelect}
+            disabled={uploading || !userName.trim()}
+            className="absolute inset-0 opacity-0 cursor-pointer z-10"
+            id="file-upload"
+          />
+          <div
+            className={`border-2 border-dashed rounded-2xl p-12 flex flex-col items-center justify-center text-center transition-all relative overflow-hidden group ${
+              uploading || !userName.trim()
+                ? 'border-zinc-700 bg-zinc-900/20 cursor-not-allowed'
+                : 'border-zinc-700 hover:border-indigo-500 cursor-pointer hover:bg-zinc-900/50'
+            }`}
+            style={{
+              backgroundImage: uploading || !userName.trim() 
+                ? "url(\"data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%234B5563' stroke-width='2' stroke-dasharray='8%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e\")"
+                : "url(\"data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%234B5563' stroke-width='2' stroke-dasharray='8%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e\")"
+            }}
+          >
+            <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+            
+            {uploading ? (
+              <div className="relative z-10 w-full max-w-md">
+                <div className="w-16 h-16 bg-zinc-900 rounded-2xl flex items-center justify-center mb-6 mx-auto">
+                  <svg className="w-8 h-8 text-indigo-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold mb-2">Uploading... {uploadProgress}%</h3>
+                <div className="w-full h-2 bg-zinc-800 rounded-full overflow-hidden mb-2">
+                  <div
+                    className="h-full bg-indigo-500 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                </div>
+                <p className="text-xs text-zinc-500">Please wait while we upload your photos</p>
+              </div>
+            ) : (
+              <div className="relative z-10">
+                <div className="w-16 h-16 bg-zinc-900 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 mx-auto">
+                  <svg className="w-8 h-8 text-indigo-500 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold mb-2">
+                  {userName.trim() ? (
+                    <>Drag & drop or <span className="text-indigo-400">browse files</span></>
+                  ) : (
+                    'Enter your name first'
+                  )}
+                </h3>
+                <p className="text-zinc-500 text-sm max-w-xs mx-auto">
+                  {userName.trim() 
+                    ? 'Support JPG, PNG, GIF or WebP formats. Maximum file size is 10MB per file.'
+                    : 'Please enter your name in the left panel before uploading photos'
+                  }
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-4 flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <h4 className="text-sm font-semibold text-red-400 mb-1">Upload Error</h4>
+              <p className="text-sm text-red-400/80">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Upload Stats */}
+        {!uploading && photoCount > 0 && (
+          <div className="bg-gradient-to-br from-[#1c1c21]/40 to-[#111114]/40 backdrop-blur-xl border border-white/5 p-4 rounded-xl">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Gallery Updated</p>
+                  <p className="text-xs text-zinc-500">{photoCount} photos in this event</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span className="text-xs text-zinc-500 font-mono">Live</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
