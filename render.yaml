@@ -3,7 +3,6 @@ services:
   - type: web
     name: circlo-api
     runtime: node
-    env: node
     region: oregon
     plan: free
     buildCommand: cd server && npm install
@@ -27,8 +26,6 @@ services:
     name: circlo-frontend
     runtime: static
     env: static
-    region: oregon
-    plan: free
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
     envVars:
