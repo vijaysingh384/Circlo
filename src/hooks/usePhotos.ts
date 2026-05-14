@@ -21,7 +21,6 @@ export function usePhotos(eventId: string | undefined): UsePhotosReturn {
       setPhotos(data.photos || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load photos');
-      console.error('Failed to load photos:', err);
     } finally {
       setLoading(false);
     }

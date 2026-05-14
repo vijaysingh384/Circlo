@@ -8,7 +8,7 @@ import { fileTypeFromBuffer } from 'file-type';
 // Configuration
 const VALIDATION_CONFIG = {
   // File size limits
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
   MIN_FILE_SIZE: 1024, // 1KB (prevent empty files)
   
   // Allowed image types

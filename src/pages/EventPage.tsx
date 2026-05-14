@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getHostToken, getSessionToken } from '../lib/tokens';
+import { copyToClipboard } from '../utils/clipboard';
 
 // Components
 import { EventHeader } from '../components/EventHeader';
@@ -55,7 +56,6 @@ export function EventPage() {
     error: uploadError,
     fileInputRef,
     handleFileSelect,
-    uploadFiles,
   } = useUpload({
     eventId,
     userName,
@@ -110,7 +110,7 @@ export function EventPage() {
     if (!event) return;
 
     const link = `${window.location.origin}/join?code=${event.joinCode}`;
-    await navigator.clipboard.writeText(link);
+    await copyToClipboard(link);
     addToast('Share link copied!', 'success');
   };
 

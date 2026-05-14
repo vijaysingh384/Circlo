@@ -31,13 +31,12 @@ export function useSocket(options: UseSocketOptions): UseSocketReturn {
 
     // Connection events
     socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
       // Join event room
       socket.emit('join:event', { eventId, userName: userName || 'Anonymous' });
     });
 
     socket.on('disconnect', () => {
-      console.log('Socket disconnected');
+      // Socket disconnected
     });
 
     socket.on('connect_error', (error) => {

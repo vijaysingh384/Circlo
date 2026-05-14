@@ -5,8 +5,8 @@ import { createServer } from 'http';
 import cors from 'cors';
 import path from 'path';
 
-import eventsRouter from './Routes/Events.js';
-import photosRouter from './Routes/Photos.js';
+import eventsRouter from './routes/events.js';
+import photosRouter from './routes/photos.js';
 
 import './config/mongoose-connection.js';
 import Database from './lib/database.js';

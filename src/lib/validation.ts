@@ -6,7 +6,7 @@ import type { ValidationResult, ValidationRules } from '../types';
 
 export const VALIDATION_RULES: ValidationRules = {
   // File validation
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
   MIN_FILE_SIZE: 1024, // 1KB
   ALLOWED_FILE_TYPES: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'],
   ALLOWED_EXTENSIONS: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.heic', '.heif'],
