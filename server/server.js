@@ -36,19 +36,19 @@ app.locals.io = io;
 
 // CORS configuration - allow multiple origins
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'http://localhost:3000',
-  'https://circlo.vercel.app',
-  process.env.FRONTEND_URL
-].filter(Boolean);
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://circlo-4bw80il17-vijaysingh384s-projects.vercel.app"
+];
 
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "https://circlo-3hzhb65qs-vijaysingh384s-projects.vercel.app"
-  ],
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS blocked"));
+    }
+  },
   credentials: true
 }));
 
@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
   res.send('Circlo API Server');
 });
 
-app.use('/api', eventsRouter);
+app.use('/api/events', eventsRouter);
 app.use('/api', photosRouter);
 
 const PORT = process.env.PORT || 3001;
