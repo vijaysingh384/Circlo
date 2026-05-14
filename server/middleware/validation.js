@@ -37,7 +37,7 @@ const VALIDATION_CONFIG = {
   FORBIDDEN_CHARS: /[<>:"|?*\x00-\x1f]/g,
   
   // Upload limits per session
-  MAX_UPLOADS_PER_SESSION: 20,
+  MAX_UPLOADS_PER_SESSION: 100,
 };
 
 /**
