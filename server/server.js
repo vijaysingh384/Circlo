@@ -59,8 +59,6 @@ app.use(
     credentials: true,
   })
 );
-  
-
 
 app.use(express.json({ limit: '1mb' })); // Limit JSON payload size
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
