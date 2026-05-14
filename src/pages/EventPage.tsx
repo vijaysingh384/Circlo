@@ -1,121 +1,205 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { io, Socket } from 'socket.io-client';
 import { getHostToken, getSessionToken } from '../lib/tokens';
 import { copyToClipboard } from '../utils/clipboard';
+import { api } from '../lib/api';
+import { downloadBlob } from '../utils/download';
+import type { Event, Photo } from '../types';
 
 // Components
 import { EventHeader } from '../components/EventHeader';
 import { QRCodeModal } from '../components/QRCodeModal';
 import { UploadSection } from '../components/UploadSection';
 import { PhotoGallery } from '../components/PhotoGallery';
-import { ToastContainer } from '../components/Toast';
 
-// Custom Hooks
-import { useEvent } from '../hooks/useEvent';
-import { usePhotos } from '../hooks/usePhotos';
-import { useUpload } from '../hooks/useUpload';
-import { useToasts } from '../hooks/useToasts';
-import { usePhotoSelection } from '../hooks/usePhotoSelection';
-import { useSocketEvents } from '../hooks/useSocketEvents';
+const SOCKET_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 export function EventPage() {
   const { eventId } = useParams<{ eventId: string }>();
   
-  // Local state
+  // State
+  const [event, setEvent] = useState<Event | null>(null);
+  const [photos, setPhotos] = useState<Photo[]>([]);
+  const [selectedPhotos, setSelectedPhotos] = useState<Set<string>>(new Set());
   const [userName, setUserName] = useState('');
   const [showQR, setShowQR] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [onlineUsers, setOnlineUsers] = useState(0);
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const socketRef = useRef<Socket | null>(null);
+  const isInitializedRef = useRef(false);
   
   // Tokens
   const hostToken = eventId ? getHostToken(eventId) : null;
   const sessionToken = eventId ? getSessionToken(eventId) : null;
   const isHost = Boolean(hostToken);
 
-  // Custom hooks
-  const { event, loading: eventLoading, error: eventError } = useEvent(eventId);
-  
-  const {
-    photos,
-    addPhoto,
-    removePhoto,
-    deletePhoto,
-  } = usePhotos(eventId);
+  // Load event and photos
+  useEffect(() => {
+    if (!eventId) return;
 
-  const { toasts, addToast, removeToast } = useToasts();
+    const loadData = async () => {
+      try {
+        const [eventData, photosData] = await Promise.all([
+          api.getEvent(eventId),
+          api.getPhotos(eventId),
+        ]);
+        
+        setEvent(eventData);
+        setPhotos(photosData.photos || []);
+      } catch (err) {
+        console.error('Failed to load data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const {
-    selectedPhotos,
-    toggleSelection,
-    clearSelection,
-    downloadAll,
-    downloadSelected,
-  } = usePhotoSelection(eventId);
+    loadData();
+  }, [eventId]);
 
-  const {
-    uploading,
-    uploadProgress,
-    error: uploadError,
-    fileInputRef,
-    handleFileSelect,
-  } = useUpload({
-    eventId,
-    userName,
-    sessionToken,
-    onUploadStart: (fileCount) => {
-      notifyUploadStarted(fileCount);
-    },
-    onUploadComplete: () => {
-      addToast('Photos uploaded successfully!', 'success');
-    },
-    onError: (error) => {
-      addToast(error, 'warning');
-    },
-  });
+  // Socket.IO connection
+  useEffect(() => {
+    if (!eventId || isInitializedRef.current) return;
 
-  const { onlineUsers, notifyUploadStarted } = useSocketEvents({
-    eventId: eventId || '',
-    userName,
-    onPhotoUploaded: addPhoto,
-    onPhotoDeleted: removePhoto,
-    onToast: addToast,
-  });
+    isInitializedRef.current = true;
+
+    const socket = io(SOCKET_URL, {
+      transports: ['websocket', 'polling'],
+      reconnection: true,
+    });
+
+    socketRef.current = socket;
+
+    socket.on('connect', () => {
+      socket.emit('join:event', { eventId, userName: userName || 'Anonymous' });
+    });
+
+    socket.on('photo:uploaded', (photo: Photo) => {
+      setPhotos((prev) => {
+        if (prev.some((p) => p.photoId === photo.photoId)) return prev;
+        return [...prev, photo];
+      });
+    });
+
+    socket.on('photo:deleted', (data: { photoId: string }) => {
+      setPhotos((prev) => prev.filter((p) => p.photoId !== data.photoId));
+      setSelectedPhotos((prev) => {
+        const updated = new Set(prev);
+        updated.delete(data.photoId);
+        return updated;
+      });
+    });
+
+    socket.on('users:online', (data: { count: number }) => {
+      setOnlineUsers(data.count);
+    });
+
+    return () => {
+      isInitializedRef.current = false;
+      if (socket) {
+        socket.emit('leave:event', { eventId });
+        socket.disconnect();
+      }
+    };
+  }, [eventId, userName]);
 
   // Handlers
-  const handleDelete = async (photoId: string) => {
-    if (!confirm('Delete this photo?')) return;
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length || !eventId || !userName.trim()) return;
+
+    setUploading(true);
+    setUploadProgress(0);
+
+    const token = sessionToken || crypto.randomUUID();
 
     try {
-      await deletePhoto(photoId, sessionToken, hostToken);
+      // Notify upload started
+      if (socketRef.current) {
+        socketRef.current.emit('upload:started', {
+          eventId,
+          userName: userName.trim(),
+          fileCount: files.length,
+        });
+      }
+
+      // Upload each file
+      for (let i = 0; i < files.length; i++) {
+        await api.uploadPhoto(eventId, files[i], userName.trim(), token);
+        setUploadProgress(Math.round(((i + 1) / files.length) * 100));
+      }
+
+      // Clear input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     } catch (err) {
-      addToast(err instanceof Error ? err.message : 'Delete failed', 'warning');
+      console.error('Upload failed:', err);
+      alert(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const handleDelete = async (photoId: string) => {
+    if (!confirm('Delete this photo?') || !eventId) return;
+
+    try {
+      await api.deletePhoto(eventId, photoId, sessionToken, hostToken);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Delete failed');
     }
   };
 
   const handleDownloadAll = async () => {
+    if (!eventId) return;
+
     try {
-      await downloadAll(event?.name || 'event');
+      const blob = await api.downloadAll(eventId);
+      downloadBlob(blob, `${event?.name || 'event'}_photos.zip`);
     } catch (err) {
-      addToast(err instanceof Error ? err.message : 'Download failed', 'warning');
+      alert(err instanceof Error ? err.message : 'Download failed');
     }
   };
 
   const handleDownloadSelected = async () => {
+    if (!eventId || selectedPhotos.size === 0) return;
+
     try {
-      await downloadSelected(event?.name || 'event');
+      const blob = await api.downloadSelected(eventId, Array.from(selectedPhotos));
+      downloadBlob(blob, `${event?.name || 'event'}_selected_photos.zip`);
+      setSelectedPhotos(new Set());
     } catch (err) {
-      addToast(err instanceof Error ? err.message : 'Download failed', 'warning');
+      alert(err instanceof Error ? err.message : 'Download failed');
     }
+  };
+
+  const toggleSelection = (photoId: string) => {
+    setSelectedPhotos((prev) => {
+      const updated = new Set(prev);
+      if (updated.has(photoId)) {
+        updated.delete(photoId);
+      } else {
+        updated.add(photoId);
+      }
+      return updated;
+    });
   };
 
   const copyShareLink = async () => {
     if (!event) return;
-
     const link = `${window.location.origin}/join?code=${event.joinCode}`;
     await copyToClipboard(link);
-    addToast('Share link copied!', 'success');
+    alert('Share link copied!');
   };
 
   // Loading state
-  if (eventLoading) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0f1e]">
         <div className="text-center">
@@ -127,11 +211,11 @@ export function EventPage() {
   }
 
   // Error state
-  if (eventError || !event) {
+  if (!event) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0f1e]">
         <div className="text-center">
-          <p className="text-red-400">{eventError || 'Event not found'}</p>
+          <p className="text-red-400">Event not found</p>
         </div>
       </div>
     );
@@ -141,8 +225,6 @@ export function EventPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0f1e] text-white">
-      <ToastContainer toasts={toasts} onRemove={removeToast} />
-
       <EventHeader
         eventName={event.name}
         photoCount={photos.length}
@@ -178,7 +260,6 @@ export function EventPage() {
           onUserNameChange={setUserName}
           uploading={uploading}
           uploadProgress={uploadProgress}
-          error={uploadError}
           photoCount={photos.length}
           eventJoinCode={event.joinCode}
           fileInputRef={fileInputRef}
@@ -192,7 +273,7 @@ export function EventPage() {
           sessionToken={sessionToken}
           onToggleSelection={toggleSelection}
           onDelete={handleDelete}
-          onClearSelection={clearSelection}
+          onClearSelection={() => setSelectedPhotos(new Set())}
         />
       </div>
     </div>

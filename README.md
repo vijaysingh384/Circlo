@@ -44,14 +44,11 @@ circlo/
 │   │   ├── QRCodeModal.tsx
 │   │   ├── Toast.tsx
 │   │   └── UploadSection.tsx
-│   ├── hooks/                # Custom React hooks
-│   │   ├── useEvent.ts
-│   │   ├── usePhotos.ts
-│   │   ├── useUpload.ts
-│   │   ├── useSocket.ts
-│   │   ├── useSocketEvents.ts
-│   │   ├── usePhotoSelection.ts
-│   │   └── useToasts.ts
+│   ├── hooks/                # Custom React hooks (4 hooks)
+│   │   ├── useEvent.ts       # Fetch event data
+│   │   ├── usePhotos.ts      # Manage photos & selection
+│   │   ├── useUpload.ts      # Handle file uploads
+│   │   └── useSocketEvents.ts # Real-time WebSocket events
 │   ├── pages/                # Page components
 │   │   ├── HomePage.tsx
 │   │   ├── JoinPage.tsx
@@ -256,6 +253,37 @@ Only image files are allowed:
 | `users-online` | Online user count update |
 
 ## 🎨 Customization
+
+### Custom Hooks Architecture
+
+The project uses **4 focused custom hooks** for clean separation of concerns:
+
+1. **useEvent.ts** - Event data management
+   - Fetches event details
+   - Handles loading and error states
+   - Simple, focused responsibility
+
+2. **usePhotos.ts** - Photo management (consolidated)
+   - Photo state management
+   - Photo selection (multi-select)
+   - Download functionality (all/selected)
+   - Add/remove/delete operations
+   - All photo-related logic in one place
+
+3. **useUpload.ts** - File upload handling
+   - File selection and validation
+   - Upload progress tracking
+   - Preview management
+   - Error handling
+
+4. **useSocketEvents.ts** - Real-time communication (consolidated)
+   - Socket.IO connection management
+   - Real-time event handlers
+   - Online user tracking
+   - Upload notifications
+   - All WebSocket logic in one place
+
+This consolidation keeps the codebase simple while maintaining clear responsibilities.
 
 ### Changing Colors
 

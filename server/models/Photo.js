@@ -15,6 +15,9 @@ const PhotoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  thumbnailPath: {
+    type: String,
+  },
   fileName: {
     type: String,
     required: true,
@@ -40,6 +43,9 @@ const PhotoSchema = new mongoose.Schema({
   publicUrl: {
     type: String,
     required: true,
+  },
+  thumbnailUrl: {
+    type: String,
   },
   uploadedAt: {
     type: String,

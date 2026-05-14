@@ -2,70 +2,69 @@ import fs from 'fs/promises';
 import path from 'path';
 import { createReadStream } from 'fs';
 
-/**
- * Local file storage provider
- */
 class LocalStorage {
   constructor(uploadDir = 'public/uploads') {
-    this.uploadDir = uploadDir;
+    this.uploadDir = path.resolve(uploadDir); // always absolute
+    this.publicRoot = path.resolve('public');  // Express static root
   }
 
   async init() {
-    // Ensure upload directory exists
     await fs.mkdir(this.uploadDir, { recursive: true });
   }
 
-  /**
-   * Save a file to local storage
-   * @param {Object} options
-   * @param {Buffer} options.buffer - File buffer
-   * @param {string} options.fileName - Original filename
-   * @param {string} options.mimeType - MIME type
-   * @param {string} options.eventId - Event ID
-   * @returns {Promise<{publicUrl: string, storagePath: string}>}
-   */
-  async save({ buffer, fileName, mimeType, eventId }) {
-    // Create event-specific directory
+  /** Sanitize a filename for safe use in URLs */
+  _sanitize(name) {
+    return name
+      .replace(/[^\w.\-]/g, '_') // replace spaces & special chars with _
+      .replace(/_+/g, '_');       // collapse multiple underscores
+  }
+
+  /** Convert an absolute disk path to a public URL */
+  _toUrl(absolutePath) {
+    // Get path relative to the public/ root, then prefix with /
+    const rel = path.relative(this.publicRoot, absolutePath);
+    return '/' + rel.replace(/\\/g, '/');
+  }
+
+  async save({ buffer, thumbnail, fileName, mimeType, eventId }) {
     const eventDir = path.join(this.uploadDir, eventId);
     await fs.mkdir(eventDir, { recursive: true });
 
-    // Generate unique filename
     const timestamp = Date.now();
     const ext = path.extname(fileName);
-    const baseName = path.basename(fileName, ext);
+    const baseName = this._sanitize(path.basename(fileName, ext));
     const uniqueFileName = `${baseName}_${timestamp}${ext}`;
-    
+
     const storagePath = path.join(eventDir, uniqueFileName);
-    
-    // Write file
     await fs.writeFile(storagePath, buffer);
+    const publicUrl = this._toUrl(storagePath);
 
-    // Generate public URL
-    const publicUrl = `/${storagePath.replace(/\\/g, '/')}`;
+    let thumbnailUrl = publicUrl;
+    let thumbnailPath = storagePath;
 
-    return {
-      publicUrl,
-      storagePath,
-    };
+    if (thumbnail) {
+      const thumbnailFileName = `${baseName}_${timestamp}_thumb.jpg`;
+      thumbnailPath = path.join(eventDir, thumbnailFileName);
+      await fs.writeFile(thumbnailPath, thumbnail);
+      thumbnailUrl = this._toUrl(thumbnailPath);
+    }
+
+    return { publicUrl, thumbnailUrl, storagePath, thumbnailPath };
   }
 
-  /**
-   * Delete a file from storage
-   * @param {string} storagePath - Path to the file
-   */
-  async delete(storagePath) {
+  async delete(storagePath, thumbnailPath) {
     try {
       await fs.unlink(storagePath);
+      if (thumbnailPath && thumbnailPath !== storagePath) {
+        await fs.unlink(thumbnailPath).catch(err =>
+          console.error(`Error deleting thumbnail ${thumbnailPath}:`, err)
+        );
+      }
     } catch (err) {
       console.error(`Error deleting file ${storagePath}:`, err);
     }
   }
 
-  /**
-   * Get a read stream for a file
-   * @param {string} storagePath - Path to the file
-   * @returns {ReadStream}
-   */
   async getStream(storagePath) {
     return createReadStream(storagePath);
   }

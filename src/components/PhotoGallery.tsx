@@ -19,113 +19,107 @@ export function PhotoGallery({
   onDelete,
   onClearSelection,
 }: PhotoGalleryProps) {
-  if (photos.length === 0) {
+  if (!photos.length) {
     return (
-      <div className="text-center py-24">
-        <div className="w-20 h-20 bg-zinc-900 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <svg className="w-10 h-10 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <h3 className="text-xl font-bold mb-2">No photos yet</h3>
-        <p className="text-zinc-500">Be the first to upload and start building your gallery!</p>
+      <div className="py-24 text-center">
+        <h3 className="mb-2 text-xl font-bold">No photos yet</h3>
+        <p className="text-zinc-500">
+          Upload photos to start the gallery
+        </p>
       </div>
     );
   }
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      {/* Header */}
+      <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-xl font-bold">Gallery</h2>
-          <p className="text-xs text-zinc-500 mt-1 uppercase tracking-widest">
-            {photos.length} {photos.length === 1 ? 'Photo' : 'Photos'} • Updated Live
+
+          <p className="mt-1 text-xs uppercase tracking-widest text-zinc-500">
+            {photos.length} {photos.length === 1 ? 'Photo' : 'Photos'}
           </p>
         </div>
+
         {selectedPhotos.size > 0 && (
           <button
             onClick={onClearSelection}
-            className="text-sm text-zinc-400 hover:text-white transition-colors"
+            className="text-sm text-zinc-400 hover:text-white"
           >
-            Clear Selection ({selectedPhotos.size})
+            Clear ({selectedPhotos.size})
           </button>
         )}
       </div>
-      
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {photos.map((photo) => (
-          <div
-            key={photo.photoId}
-            className={`relative group rounded-xl overflow-hidden bg-zinc-900/50 border-2 transition-all hover:scale-[1.02] ${
-              selectedPhotos.has(photo.photoId)
-                ? 'border-indigo-500 shadow-lg shadow-indigo-500/20'
-                : 'border-transparent hover:border-zinc-700'
-            }`}
-          >
-            <div className="aspect-square">
-              <img
-                src={photo.publicUrl}
-                alt={photo.fileName}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="absolute bottom-0 left-0 right-0 p-3">
-                <p className="text-xs font-semibold truncate text-white">{photo.uploadedByName}</p>
-                <p className="text-xs text-zinc-400">
-                  {new Date(photo.uploadedAt).toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
-                </p>
-              </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <button
-                onClick={() => onToggleSelection(photo.photoId)}
-                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all backdrop-blur-sm ${
-                  selectedPhotos.has(photo.photoId)
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/50'
-                    : 'bg-black/50 text-white hover:bg-black/70'
-                }`}
-              >
-                {selectedPhotos.has(photo.photoId) ? (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="9" strokeWidth={2} />
-                  </svg>
-                )}
-              </button>
-              
-              {(isHost || photo.sessionToken === sessionToken) && (
+      {/* Grid */}
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {photos.map((photo) => {
+          const isSelected = selectedPhotos.has(photo.photoId);
+
+          return (
+            <div
+              key={photo.photoId}
+              className={`group relative overflow-hidden rounded-xl border bg-zinc-900/50 transition hover:scale-[1.02] ${
+                isSelected
+                  ? 'border-indigo-500'
+                  : 'border-transparent hover:border-zinc-700'
+              }`}
+            >
+              {/* Image - Use thumbnail for gallery, full image on click */}
+              <img
+                src={photo.thumbnailUrl || photo.publicUrl}
+                alt={photo.fileName}
+                className="aspect-square w-full object-cover"
+                loading="lazy"
+              />
+
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                <div className="absolute bottom-0 w-full p-3 text-white">
+                  <p className="truncate text-xs font-semibold">
+                    {photo.uploadedByName}
+                  </p>
+
+                  <p className="text-xs text-zinc-300">
+                    {new Date(photo.uploadedAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="absolute right-2 top-2 flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
+                
                 <button
-                  onClick={() => onDelete(photo.photoId)}
-                  className="w-8 h-8 bg-red-500/80 hover:bg-red-500 backdrop-blur-sm rounded-lg flex items-center justify-center transition-all shadow-lg"
+                  onClick={() => onToggleSelection(photo.photoId)}
+                  className={`flex h-8 w-8 items-center justify-center rounded-lg text-sm ${
+                    isSelected
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-black/60 text-white'
+                  }`}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
+                  {isSelected ? '✓' : '+'}
                 </button>
+
+                {(isHost || photo.sessionToken === sessionToken) && (
+                  <button
+                    onClick={() => onDelete(photo.photoId)}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/80 text-white hover:bg-red-500"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Selected Badge */}
+              {isSelected && (
+                <div className="absolute left-2 top-2 rounded bg-indigo-600 px-2 py-1 text-xs font-bold text-white">
+                  Selected
+                </div>
               )}
             </div>
-
-            {/* Selection Badge */}
-            {selectedPhotos.has(photo.photoId) && (
-              <div className="absolute top-2 left-2 bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded-md shadow-lg">
-                Selected
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

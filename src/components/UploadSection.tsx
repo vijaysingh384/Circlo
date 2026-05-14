@@ -5,16 +5,10 @@ interface UploadSectionProps {
   onUserNameChange: (name: string) => void;
   uploading: boolean;
   uploadProgress: number;
-  error: string;
   photoCount: number;
   eventJoinCode: string;
   fileInputRef: RefObject<HTMLInputElement | null>;
   onFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  selectedFiles?: File[];
-  previewUrls?: string[];
-  onUpload?: () => void;
-  onCancelUpload?: () => void;
-  onRemovePreview?: (index: number) => void;
 }
 
 export function UploadSection({
@@ -22,14 +16,13 @@ export function UploadSection({
   onUserNameChange,
   uploading,
   uploadProgress,
-  error,
   photoCount,
   eventJoinCode,
   fileInputRef,
   onFileSelect,
 }: UploadSectionProps) {
   return (
-    <div className="grid lg:grid-cols-5 gap-8 mb-8">
+    <div className="relative z-10 flex-1 grid lg:grid-cols-[460px_1fr] items-center px-6 lg:px-12 gap-0 max-w-[1200px] mx-auto w-full">
       {/* Left: Instructions & Info (2 columns) */}
       <div className="lg:col-span-2 space-y-6">
         {/* Requirements Card */}
@@ -63,7 +56,7 @@ export function UploadSection({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <span className="text-sm text-zinc-300">Maximum file size: 10MB per photo</span>
+              <span className="text-sm text-zinc-300">Maximum file size: 5MB per photo</span>
             </li>
             <li className="flex gap-3">
               <div className="w-5 h-5 mt-0.5 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
@@ -166,7 +159,7 @@ export function UploadSection({
                 </h3>
                 <p className="text-zinc-500 text-sm max-w-xs mx-auto">
                   {userName.trim() 
-                    ? 'Support JPG, PNG, GIF or WebP formats. Maximum file size is 10MB per file.'
+                    ? 'Support JPG, PNG, GIF or WebP formats. Maximum file size is 5MB per file.'
                     : 'Please enter your name in the left panel before uploading photos'
                   }
                 </p>
@@ -174,19 +167,6 @@ export function UploadSection({
             )}
           </div>
         </div>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-4 flex items-start gap-3">
-            <svg className="w-5 h-5 text-red-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <div>
-              <h4 className="text-sm font-semibold text-red-400 mb-1">Upload Error</h4>
-              <p className="text-sm text-red-400/80">{error}</p>
-            </div>
-          </div>
-        )}
 
         {/* Upload Stats */}
         {!uploading && photoCount > 0 && (

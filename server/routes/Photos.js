@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { randomUUID } from 'crypto';
 import { upload } from '../middleware/upload.js';
+import { optimizeImage } from '../middleware/imageOptimization.js';
 import { validateUpload, validateUserName } from '../middleware/validation.js';
 import { emitPhotoUploaded, emitPhotoDeleted, emitEventStats } from '../lib/socket.js';
 
@@ -29,6 +30,7 @@ router.get('/events/:eventId/photos', async (req, res) => {
             uploadedByName: photo.uploadedByName,
             sessionToken: photo.sessionToken,
             publicUrl: photo.publicUrl,
+            thumbnailUrl: photo.thumbnailUrl || photo.publicUrl,
             uploadedAt: photo.uploadedAt,
         }));
         return res.json({ photos: publicPhotos });
@@ -42,7 +44,7 @@ router.get('/events/:eventId/photos', async (req, res) => {
     }
 });
 // POST /api/events/:eventId/photos - Upload a photo
-router.post('/events/:eventId/photos', upload.single('photo'), validateUpload, async (req, res) => {
+router.post('/events/:eventId/photos', upload.single('photo'), optimizeImage, validateUpload, async (req, res) => {
     const db = req.app.locals.db;
     const storage = req.app.locals.storage;
     const { eventId } = req.params;
@@ -89,9 +91,10 @@ router.post('/events/:eventId/photos', upload.single('photo'), validateUpload, a
                 message: `Maximum ${UPLOAD_LIMIT} photos per session`,
             });
         }
-        // Save file to storage
-        const { publicUrl, storagePath } = await storage.save({
+        // Save file to storage (with thumbnail)
+        const { publicUrl, thumbnailUrl, storagePath, thumbnailPath } = await storage.save({
             buffer: req.file.buffer,
+            thumbnail: req.file.thumbnail,
             fileName: req.file.originalname,
             mimeType: req.file.mimetype,
             eventId,
@@ -102,12 +105,14 @@ router.post('/events/:eventId/photos', upload.single('photo'), validateUpload, a
             photoId,
             eventId,
             storagePath,
+            thumbnailPath,
             fileName: req.file.originalname,
             fileSize: req.file.size,
             uploadedByName,
             sessionToken,
             storageProvider: process.env.R2_BUCKET ? 'r2' : 'local',
             publicUrl,
+            thumbnailUrl,
             uploadedAt: new Date().toISOString(),
         });
         // Return PhotoPublic shape
@@ -119,6 +124,7 @@ router.post('/events/:eventId/photos', upload.single('photo'), validateUpload, a
             uploadedByName: photo.uploadedByName,
             sessionToken: photo.sessionToken,
             publicUrl: photo.publicUrl,
+            thumbnailUrl: photo.thumbnailUrl,
             uploadedAt: photo.uploadedAt,
         };
 
@@ -179,8 +185,8 @@ router.delete('/events/:eventId/photos/:photoId', async (req, res) => {
                 message: 'You do not have permission to delete this photo',
             });
         }
-        // Delete from storage
-        await storage.delete(photo.storagePath);
+        // Delete from storage (including thumbnail)
+        await storage.delete(photo.storagePath, photo.thumbnailPath);
         // Delete from database
         await db.deletePhoto(photoId);
 

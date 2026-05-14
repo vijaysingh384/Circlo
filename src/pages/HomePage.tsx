@@ -10,29 +10,26 @@ const sampleEvents = [
     photos: 47,
     people: 8,
     color: 'emerald',
-    gradient: 'from-[#1a2521] to-[#0b1120]',
     icon: (
-      <div style={{ overflow: 'hidden' }}>
-        <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#0d1a2e"></stop>
-              <stop offset="55%" stopColor="#162a16"></stop>
-              <stop offset="100%" stopColor="#0c160c"></stop>
-            </linearGradient>
-          </defs>
-          <rect width="300" height="120" fill="url(#g1)"></rect>
-          <circle cx="165" cy="16" r="9" fill="rgba(255,240,200,0.1)"></circle>
-          <circle cx="18" cy="10" r="1.5" fill="rgba(255,255,255,0.5)"></circle>
-          <circle cx="52" cy="7" r="1" fill="rgba(255,255,255,0.4)"></circle>
-          <circle cx="88" cy="14" r="1" fill="rgba(255,255,255,0.3)"></circle>
-          <circle cx="125" cy="6" r="1.5" fill="rgba(255,255,255,0.4)"></circle>
-          <polygon points="0,120 0,82 22,56 44,72 65,36 90,58 112,44 136,62 158,32 185,50 200,40 200,120" fill="#1c2e1c"></polygon>
-          <polygon points="0,120 0,92 16,78 38,90 60,70 85,84 108,68 132,82 155,64 178,76 200,66 200,120" fill="#0f180f"></polygon>
-          <polygon points="62,36 66,27 70,36" fill="rgba(255,255,255,0.14)"></polygon>
-          <polygon points="155,32 159,23 163,32" fill="rgba(255,255,255,0.1)"></polygon>
-        </svg>
-      </div>
+      <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0d1a2e"></stop>
+            <stop offset="55%" stopColor="#162a16"></stop>
+            <stop offset="100%" stopColor="#0c160c"></stop>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="120" fill="url(#g1)"></rect>
+        <circle cx="165" cy="16" r="9" fill="rgba(255,240,200,0.1)"></circle>
+        <circle cx="18" cy="10" r="1.5" fill="rgba(255,255,255,0.5)"></circle>
+        <circle cx="52" cy="7" r="1" fill="rgba(255,255,255,0.4)"></circle>
+        <circle cx="88" cy="14" r="1" fill="rgba(255,255,255,0.3)"></circle>
+        <circle cx="125" cy="6" r="1.5" fill="rgba(255,255,255,0.4)"></circle>
+        <polygon points="0,120 0,82 22,56 44,72 65,36 90,58 112,44 136,62 158,32 185,50 200,40 200,120" fill="#1c2e1c"></polygon>
+        <polygon points="0,120 0,92 16,78 38,90 60,70 85,84 108,68 132,82 155,64 178,76 200,66 200,120" fill="#0f180f"></polygon>
+        <polygon points="62,36 66,27 70,36" fill="rgba(255,255,255,0.14)"></polygon>
+        <polygon points="155,32 159,23 163,32" fill="rgba(255,255,255,0.1)"></polygon>
+      </svg>
     ),
   },
   {
@@ -40,15 +37,27 @@ const sampleEvents = [
     photos: 213,
     people: 34,
     color: 'orange',
-    gradient: 'from-[#251d1a] to-[#0b1120]',
     icon: (
-      <div className="relative">
-        <div className="w-24 h-16 border-2 border-orange-500/20 rounded-full border-b-0"></div>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-4">
-          <div className="w-1 h-4 bg-orange-500/20 rounded-full"></div>
-          <div className="w-1 h-4 bg-orange-500/20 rounded-full"></div>
-        </div>
-      </div>
+      <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#1c0f06"></stop>
+            <stop offset="100%" stopColor="#0e0806"></stop>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="120" fill="url(#g2)"></rect>
+        <ellipse cx="100" cy="42" rx="65" ry="22" fill="rgba(255,160,50,0.05)"></ellipse>
+        <rect x="0" y="110" width="200" height="10" fill="#0a0504"></rect>
+        <rect x="84" y="62" width="8" height="48" fill="#0e0808"></rect>
+        <circle cx="88" cy="57" r="8" fill="#0e0808"></circle>
+        <rect x="100" y="66" width="7" height="44" fill="#0e0808"></rect>
+        <circle cx="103" cy="62" r="7" fill="#0e0808"></circle>
+        <polygon points="89,78 85,110 93,110 97,78" fill="#0e0808"></polygon>
+        <path d="M40,110 L40,40 Q40,8 100,8 Q160,8 160,40 L160,110" fill="none" stroke="rgba(255,180,80,0.1)" strokeWidth="1.5"></path>
+        <circle cx="56" cy="24" r="1.5" fill="rgba(255,220,100,0.55)"></circle>
+        <circle cx="100" cy="10" r="1.5" fill="rgba(255,220,100,0.6)"></circle>
+        <circle cx="144" cy="24" r="1.5" fill="rgba(255,220,100,0.55)"></circle>
+      </svg>
     ),
   },
   {
@@ -56,13 +65,20 @@ const sampleEvents = [
     photos: 156,
     people: 61,
     color: 'purple',
-    gradient: 'from-[#1f1a25] to-[#0b1120]',
     icon: (
-      <div className="flex gap-2 rotate-12">
-        <div className="w-4 h-32 bg-purple-500/10 rounded-full blur-xl"></div>
-        <div className="w-4 h-32 bg-purple-500/20 rounded-full blur-xl"></div>
-        <div className="w-4 h-32 bg-purple-500/10 rounded-full blur-xl"></div>
-      </div>
+      <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
+        <rect width="200" height="120" fill="#06040f"></rect>
+        <line x1="32" y1="0" x2="62" y2="120" stroke="rgba(168,85,247,0.14)" strokeWidth="28"></line>
+        <line x1="100" y1="0" x2="100" y2="120" stroke="rgba(236,72,153,0.1)" strokeWidth="20"></line>
+        <line x1="168" y1="0" x2="138" y2="120" stroke="rgba(168,85,247,0.12)" strokeWidth="24"></line>
+        <rect x="0" y="94" width="200" height="26" fill="#030208"></rect>
+        <circle cx="22" cy="105" r="3" fill="rgba(255,255,255,0.1)"></circle>
+        <circle cx="50" cy="109" r="2" fill="rgba(255,255,255,0.07)"></circle>
+        <circle cx="80" cy="103" r="3" fill="rgba(255,255,255,0.1)"></circle>
+        <circle cx="110" cy="107" r="2" fill="rgba(255,255,255,0.07)"></circle>
+        <circle cx="140" cy="104" r="3" fill="rgba(255,255,255,0.1)"></circle>
+        <circle cx="170" cy="108" r="2" fill="rgba(255,255,255,0.07)"></circle>
+      </svg>
     ),
   },
   {
@@ -70,12 +86,23 @@ const sampleEvents = [
     photos: 134,
     people: 12,
     color: 'cyan',
-    gradient: 'from-[#1a1f25] to-[#0b1120]',
     icon: (
-      <>
-        <div className="w-32 h-1 bg-cyan-500/10 blur-sm absolute bottom-8"></div>
-        <div className="w-4 h-8 bg-cyan-500/20 rounded-full blur-md"></div>
-      </>
+      <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="g4" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0d1825"></stop>
+            <stop offset="100%" stopColor="#0a1018"></stop>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="120" fill="url(#g4)"></rect>
+        <line x1="0" y1="60" x2="200" y2="60" stroke="rgba(255,150,80,0.07)" strokeWidth="0.8"></line>
+        <ellipse cx="100" cy="58" rx="42" ry="5" fill="rgba(255,150,50,0.05)"></ellipse>
+        <rect x="0" y="60" width="200" height="60" fill="#050d18"></rect>
+        <path d="M0,70 Q26,66 52,70 Q78,74 104,70 Q130,66 156,70 Q178,73 200,70" fill="none" stroke="rgba(100,160,220,0.08)" strokeWidth="1"></path>
+        <polygon points="78,58 82,50 86,58" fill="rgba(0,0,0,0.5)"></polygon>
+        <rect x="81" y="38" width="1.5" height="20" fill="rgba(0,0,0,0.4)"></rect>
+        <rect x="0" y="100" width="200" height="20" fill="#0a0c08"></rect>
+      </svg>
     ),
   },
   {
@@ -83,19 +110,31 @@ const sampleEvents = [
     photos: 72,
     people: 18,
     color: 'yellow',
-    gradient: 'from-[#25231a] to-[#0b1120]',
     icon: (
-      <div className="flex items-end gap-1.5">
-        <div className="w-2 h-10 bg-yellow-500/20 rounded-sm relative">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-yellow-500/40 blur-[2px]"></div>
-        </div>
-        <div className="w-2 h-14 bg-yellow-500/30 rounded-sm relative">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-yellow-500/60 blur-[2px]"></div>
-        </div>
-        <div className="w-2 h-8 bg-yellow-500/20 rounded-sm relative">
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-yellow-500/40 blur-[2px]"></div>
-        </div>
-      </div>
+      <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
+        <rect width="200" height="120" fill="#080503"></rect>
+        <circle cx="28" cy="20" r="16" fill="rgba(255,180,50,0.06)"></circle>
+        <circle cx="100" cy="16" r="20" fill="rgba(255,160,40,0.05)"></circle>
+        <circle cx="172" cy="20" r="14" fill="rgba(255,180,50,0.06)"></circle>
+        <rect x="52" y="82" width="96" height="34" rx="3" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" strokeWidth="1"></rect>
+        <rect x="57" y="70" width="86" height="15" rx="2" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.05)" strokeWidth="1"></rect>
+        <rect x="66" y="50" width="5" height="21" fill="rgba(255,255,255,0.1)"></rect>
+        <rect x="82" y="46" width="5" height="25" fill="rgba(255,255,255,0.1)"></rect>
+        <rect x="98" y="50" width="5" height="21" fill="rgba(255,255,255,0.1)"></rect>
+        <rect x="114" y="48" width="5" height="23" fill="rgba(255,255,255,0.1)"></rect>
+        <ellipse cx="68" cy="48" rx="4" ry="6.5" fill="rgba(255,200,60,0.85)"></ellipse>
+        <ellipse cx="68" cy="45" rx="2" ry="4" fill="rgba(255,240,150,0.9)"></ellipse>
+        <ellipse cx="84" cy="44" rx="4" ry="6.5" fill="rgba(255,200,60,0.85)"></ellipse>
+        <ellipse cx="84" cy="41" rx="2" ry="4" fill="rgba(255,240,150,0.9)"></ellipse>
+        <ellipse cx="100" cy="48" rx="4" ry="6.5" fill="rgba(255,200,60,0.85)"></ellipse>
+        <ellipse cx="100" cy="45" rx="2" ry="4" fill="rgba(255,240,150,0.9)"></ellipse>
+        <ellipse cx="116" cy="46" rx="4" ry="6.5" fill="rgba(255,200,60,0.85)"></ellipse>
+        <ellipse cx="116" cy="43" rx="2" ry="4" fill="rgba(255,240,150,0.9)"></ellipse>
+        <circle cx="68" cy="48" r="10" fill="rgba(255,180,30,0.07)"></circle>
+        <circle cx="84" cy="44" r="10" fill="rgba(255,180,30,0.07)"></circle>
+        <circle cx="100" cy="48" r="10" fill="rgba(255,180,30,0.07)"></circle>
+        <circle cx="116" cy="46" r="10" fill="rgba(255,180,30,0.07)"></circle>
+      </svg>
     ),
   },
   {
@@ -103,19 +142,31 @@ const sampleEvents = [
     photos: 89,
     people: 22,
     color: 'pink',
-    gradient: 'from-[#251a1e] to-[#0b1120]',
     icon: (
-      <>
-        <div className="absolute inset-0 flex items-center justify-center opacity-30">
-          <div className="w-24 h-24 border border-dashed border-pink-500/30 rounded-full animate-[spin_10s_linear_infinite]"></div>
-        </div>
-        <div className="flex gap-1.5 items-end h-16">
-          <div className="w-3 h-10 bg-pink-500/20"></div>
-          <div className="w-3 h-14 bg-pink-500/30"></div>
-          <div className="w-3 h-12 bg-pink-500/20"></div>
-          <div className="w-3 h-8 bg-pink-500/10"></div>
-        </div>
-      </>
+      <svg viewBox="0 0 200 120" width="100%" height="120" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="g6" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#050510"></stop>
+            <stop offset="100%" stopColor="#0a0a22"></stop>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="120" fill="url(#g6)"></rect>
+        <rect x="16" y="50" width="16" height="70" fill="rgba(255,200,50,0.1)"></rect>
+        <rect x="44" y="34" width="20" height="86" fill="rgba(255,200,50,0.08)"></rect>
+        <rect x="76" y="20" width="26" height="100" fill="rgba(255,200,50,0.07)"></rect>
+        <rect x="118" y="38" width="18" height="82" fill="rgba(255,200,50,0.09)"></rect>
+        <rect x="150" y="46" width="16" height="74" fill="rgba(255,200,50,0.1)"></rect>
+        <rect x="18" y="52" width="3" height="3" fill="rgba(255,220,100,0.5)"></rect>
+        <rect x="46" y="36" width="3" height="3" fill="rgba(255,220,100,0.45)"></rect>
+        <rect x="78" y="22" width="3.5" height="3.5" fill="rgba(255,220,100,0.4)"></rect>
+        <rect x="86" y="34" width="3" height="3" fill="rgba(255,220,100,0.35)"></rect>
+        <rect x="120" y="40" width="3" height="3" fill="rgba(255,220,100,0.45)"></rect>
+        <rect x="152" y="48" width="3" height="3" fill="rgba(255,220,100,0.4)"></rect>
+        <circle cx="38" cy="12" r="1.5" fill="rgba(255,255,255,0.4)"></circle>
+        <circle cx="100" cy="8" r="2" fill="rgba(255,255,255,0.5)"></circle>
+        <circle cx="160" cy="14" r="1.5" fill="rgba(255,255,255,0.3)"></circle>
+        <circle cx="185" cy="8" r="1" fill="rgba(255,255,255,0.4)"></circle>
+      </svg>
     ),
   },
 ];
@@ -124,7 +175,7 @@ export function HomePage() {
   const [eventName, setEventName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [photosSharedToday, setPhotosSharedToday] = useState(7172);
+  const [photosSharedToday, setPhotosSharedToday] = useState(2924);
   const navigate = useNavigate();
 
   // Animated counter
@@ -171,116 +222,161 @@ export function HomePage() {
   };
 
   return (
-    <main className="flex-1 flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24 px-6 lg:px-24 py-12">
-      {/* Left Content */}
-      <div className="flex-1 max-w-xl text-center lg:text-left">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8">
-          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-          <span className="text-[10px] font-bold tracking-[0.15em] text-blue-400 uppercase">
-            Free · No account needed
-          </span>
+    <div className="min-h-screen bg-[#030712] text-white flex flex-col">
+      {/* Navbar */}
+      <nav className="relative z-20 flex items-center justify-between px-12 h-16 border-b border-white/5 flex-shrink-0">
+        <div className="flex items-center gap-2.5">
+          <svg width="32" height="32" viewBox="0 0 44 44">
+  <rect x="2" y="2" width="40" height="40" rx="10" fill="#3b82f6"/>
+  
+
+  <path
+    d="M29,15 
+       Q24,11 18,13 
+       Q12,15 11,22 
+       Q12,29 18,31 
+       Q24,33 29,29"
+    fill="none"
+    stroke="white"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+</svg>
+          <div>
+            <div className="text-sm font-extrabold tracking-[-0.04em] text-white leading-none">CIRCLO</div>
+            <div className="text-[8px] tracking-[0.15em] text-white/30 uppercase mt-0.5">Collect every moment</div>
+          </div>
         </div>
-
-        <h2 className="text-5xl lg:text-7xl font-bold font-display tracking-tight leading-[1.1] mb-8">
-          The photos you
-          <br />
-          almost never got.
-        </h2>
-
-        <div className="space-y-2 mb-12 text-lg lg:text-xl text-gray-400">
-          <p>Create an event. Share the link.</p>
-          <p>Everyone uploads. One gallery — yours to keep.</p>
+        <div className="flex items-center gap-7">
+          <button
+            onClick={() => navigate('/join')}
+            className="text-[11px] text-white/30 tracking-[0.1em] uppercase cursor-pointer hover:text-white/50 transition-colors"
+          >
+            Join event
+          </button>
+          <div className="w-px h-4 bg-white/8"></div>
+          <button
+            onClick={() => {
+              const input = document.querySelector('input[type="text"]') as HTMLInputElement;
+              if (input) input.focus();
+            }}
+            className="relative overflow-hidden bg-blue-500 border-none text-white px-5 py-2 rounded-md text-[11px] font-bold tracking-[0.08em] uppercase cursor-pointer hover:bg-blue-600 transition-colors"
+          >
+            Create Event
+          </button>
         </div>
+      </nav>
 
-        <div className="space-y-6">
-          <form onSubmit={handleSubmit} className="relative group">
-            <label className="block text-[10px] font-bold text-gray-500 tracking-widest uppercase mb-3 text-left">
-              What are you celebrating?
-            </label>
-            <div className="flex items-stretch bg-black border border-black rounded-2xl p-1.5 focus-within:border-blue-500/50 transition-colors">
+
+      {/* Main Content */}
+      <main className="relative z-10 flex-1 grid lg:grid-cols-[460px_1fr] items-center px-6 lg:px-12 gap-0 max-w-[1200px] mx-auto w-full">
+        {/* Left Content */}
+        <div className="pr-0 lg:pr-12 py-12">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-blue-500/8 border border-blue-500/16 rounded-full px-4 py-1.5 mb-7">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_5px_rgba(59,130,246,1)]"></div>
+            <span className="text-[10px] text-blue-400/90 tracking-[0.1em] uppercase font-semibold whitespace-nowrap">
+              Free · No account needed
+            </span>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-5xl font-black tracking-[-0.05em] text-white leading-[1.02] mb-5">
+            The photos you<br />almost never got.
+          </h1>
+
+          {/* Description */}
+          <p className="text-[15px] text-white/38 leading-[1.85] mb-9 max-w-[360px]">
+            Create an event. Share the link.<br />
+            Everyone uploads. One gallery — yours to keep.
+          </p>
+
+          {/* Form Label */}
+          <div className="text-[10px] text-white/22 tracking-[0.1em] uppercase mb-2">
+            What are you celebrating?
+          </div>
+
+          {/* Input Form */}
+          <form onSubmit={handleSubmit} className="max-w-[400px]">
+            <div className="flex rounded-lg overflow-hidden border border-white/8 transition-colors focus-within:border-white/20">
               <input
                 type="text"
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
                 placeholder="Manali Trip, Birthday Photos..."
-                className="bg-black w-full px-5 outline-none text-white text-sm placeholder:text-gray-600"
+                className="flex-1 px-5 py-3.5 bg-white/[0.03]  border-none text-white text-[13px] outline-none min-w-0"
+                disabled={loading}
               />
               <button
                 type="submit"
                 disabled={loading || !eventName.trim()}
-                className={`px-6 py-3 rounded-xl text-xs font-bold tracking-widest transition-all uppercase whitespace-nowrap flex items-center gap-2 ${
-                  loading || !eventName.trim()
-                    ? 'bg-gray-700 cursor-not-allowed'
-                    : 'bg-blue-500 hover:bg-blue-600 active:scale-95'
-                }`}
+                className="bg-white/5 border-l border-white/8 text-white/25 px-5 py-3.5 text-[10px] font-extrabold tracking-[0.1em] uppercase cursor-pointer disabled:cursor-not-allowed whitespace-nowrap transition-all hover:bg-white/10 hover:text-white/50 disabled:hover:bg-white/5 disabled:hover:text-white/25"
               >
-                {loading ? (
-                  <>
-                    <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Creating...
-                  </>
-                ) : (
-                  'Create →'
-                )}
+                {loading ? 'Creating...' : 'Create →'}
               </button>
             </div>
+            
             {error && (
               <p className="mt-2 text-sm text-red-400">{error}</p>
             )}
           </form>
 
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-[11px] font-medium text-gray-400">
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          {/* Features */}
+          <div className="flex items-center gap-5 mt-5 flex-wrap">
+            <div className="flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 13 13">
+                <circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="rgba(59,130,246,0.35)" strokeWidth="1"></circle>
+                <path d="M4,6.5 L5.5,8 L9,5" stroke="#3b82f6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"></path>
               </svg>
-              <span>No account</span>
+              <span className="text-[11px] text-white/28">No account</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <div className="flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 13 13">
+                <circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="rgba(59,130,246,0.35)" strokeWidth="1"></circle>
+                <path d="M4,6.5 L5.5,8 L9,5" stroke="#3b82f6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"></path>
               </svg>
-              <span>Free forever</span>
+              <span className="text-[11px] text-white/28">Free forever</span>
             </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <div className="flex items-center gap-1.5">
+              <svg width="13" height="13" viewBox="0 0 13 13">
+                <circle cx="6.5" cy="6.5" r="5.5" fill="none" stroke="rgba(59,130,246,0.35)" strokeWidth="1"></circle>
+                <path d="M4,6.5 L5.5,8 L9,5" stroke="#3b82f6" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"></path>
               </svg>
-              <span>Share via QR</span>
+              <span className="text-[11px] text-white/28">Share via QR</span>
             </div>
+            <div className="w-px h-3 bg-white/8"></div>
+            <span className="text-[11px] text-blue-500/60">
+              {photosSharedToday.toLocaleString()} photos shared today
+            </span>
           </div>
-
-          <p className="text-xs text-blue-400/60 font-medium pt-4">
-            {photosSharedToday.toLocaleString()} photos shared today
-          </p>
         </div>
-      </div>
 
-      {/* Right Content - Card Grid */}
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl">
-        {sampleEvents.map((event, index) => (
-          <div
-            key={index}
-            className="bg-[#0b1120] border border-white/5 rounded-3xl overflow-hidden hover:border-white/10 transition-colors group card-inner-shadow"
-          >
-            <div className={`h-32 bg-gradient-to-b ${event.gradient} relative overflow-hidden flex items-center justify-center`}>
-              {event.icon}
-            </div>
-            <div className="p-4 flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-gray-200">{event.name}</h3>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">
-                  {event.photos} photos · {event.people} people
-                </p>
+        {/* Right Content - Card Grid */}
+        <div className="py-12">
+          <div className="grid grid-cols-2 gap-3 max-w-[420px] mx-auto">
+            {sampleEvents.map((event, index) => (
+              <div
+                key={index}
+                className="rounded-xl overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.7)] transition-all hover:scale-105 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] cursor-pointer"
+              >
+                <div className="overflow-hidden">
+                  {event.icon}
+                </div>
+                <div className="bg-[#0d1421] border-t border-blue-500/8 px-3 py-2.5 flex items-center justify-between">
+                  <div>
+                    <div className="text-[10px] font-bold text-white/88">{event.name}</div>
+                    <div className="text-[8px] text-white/25 mt-0.5">
+                      {event.photos} photos · {event.people} people
+                    </div>
+                  </div>
+                  <div className={`w-1.5 h-1.5 rounded-full bg-${event.color}-500 shadow-[0_0_5px_currentColor] flex-shrink-0`}></div>
+                </div>
               </div>
-              <div className={`w-1.5 h-1.5 rounded-full bg-${event.color}-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]`}></div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 }
