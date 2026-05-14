@@ -272,7 +272,7 @@ export function HomePage() {
 
 
       {/* Main Content */}
-      <main className="relative z-10 flex-1 grid lg:grid-cols-[460px_1fr] items-center px-4 sm:px-6 lg:px-12 gap-8 lg:gap-0 max-w-[1200px] mx-auto w-full py-8 lg:py-0">
+      <main className="relative z-10 flex-1 grid animate-fadeUp lg:grid-cols-[460px_1fr] items-center px-4 sm:px-6 lg:px-12 gap-8 lg:gap-0 max-w-[1200px] mx-auto w-full py-8 lg:py-0">
         {/* Left Content */}
         <div className="pr-0 lg:pr-12 py-4 sm:py-8 lg:py-12">
           {/* Badge */}

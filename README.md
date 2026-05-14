@@ -304,7 +304,59 @@ const PHOTO_EXPIRY_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 ## 🚢 Deployment
 
-### Frontend (Vercel/Netlify)
+### Quick Deploy to Render (Recommended)
+
+**⚡ Deploy in 5 minutes!** See [RENDER_QUICKSTART.md](./RENDER_QUICKSTART.md)
+
+Circlo is optimized for deployment on [Render](https://render.com) with:
+- ✅ Free tier available
+- ✅ Automatic HTTPS
+- ✅ Easy MongoDB Atlas integration
+- ✅ One-click deployment with `render.yaml`
+
+#### Deployment Files Included:
+- `render.yaml` - Blueprint for automatic deployment
+- `DEPLOYMENT.md` - Comprehensive deployment guide
+- `RENDER_QUICKSTART.md` - 5-minute quick start guide
+- `DEPLOYMENT_CHECKLIST.md` - Step-by-step checklist
+
+#### Quick Steps:
+
+1. **Set up MongoDB Atlas** (free tier)
+   - Create cluster at [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
+   - Get connection string
+
+2. **Deploy to Render**
+   - Push code to GitHub
+   - Go to [render.com](https://render.com)
+   - Click "New +" → "Blueprint"
+   - Connect repository
+   - Set environment variables
+   - Deploy!
+
+3. **Environment Variables**
+   
+   **Backend (circlo-api):**
+   ```env
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/circlo
+   BACKEND_URL=https://circlo-api.onrender.com
+   FRONTEND_URL=https://circlo-frontend.onrender.com
+   ```
+   
+   **Frontend (circlo-frontend):**
+   ```env
+   VITE_API_BASE_URL=https://circlo-api.onrender.com
+   ```
+
+#### Free Tier Notes:
+- Backend spins down after 15 minutes of inactivity
+- First request may take 30-60 seconds (cold start)
+- Uploaded files are temporary (lost on restart)
+- For production, consider Render Starter plan ($7/month)
+
+### Alternative Deployment Options
+
+#### Frontend (Vercel/Netlify)
 
 1. Build the frontend:
    ```bash
@@ -315,29 +367,49 @@ const PHOTO_EXPIRY_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 3. Set environment variable:
    ```
-   VITE_API_URL=https://your-backend-url.com
+   VITE_API_BASE_URL=https://your-backend-url.com
    ```
 
-### Backend (Railway/Render/Heroku)
+#### Backend (Railway/Heroku)
 
 1. Push to GitHub
 
-2. Connect your repository to Railway/Render
+2. Connect your repository to Railway/Heroku
 
 3. Set environment variables:
    ```
    PORT=3001
    MONGODB_URI=your-mongodb-connection-string
    FRONTEND_URL=https://your-frontend-url.com
+   BACKEND_URL=https://your-backend-url.com
    ```
 
 4. Deploy!
 
-### MongoDB Atlas
+### MongoDB Atlas Setup
 
 1. Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-2. Get your connection string
-3. Update `MONGODB_URI` in your `.env` file
+2. Create a database user
+3. Whitelist IP addresses (0.0.0.0/0 for Render)
+4. Get your connection string
+5. Update `MONGODB_URI` in your environment variables
+
+### Health Check
+
+After deployment, verify your backend is running:
+```bash
+curl https://your-api.onrender.com/health
+```
+
+Should return:
+```json
+{
+  "status": "ok",
+  "timestamp": "2025-01-10T12:00:00.000Z",
+  "uptime": 123.45,
+  "mongodb": "connected"
+}
+```
 
 ## 🧪 Testing
 

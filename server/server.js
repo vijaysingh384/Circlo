@@ -63,6 +63,16 @@ app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 app.use(express.static(path.join(process.cwd(), 'public')));
 
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    mongodb: db ? 'connected' : 'disconnected'
+  });
+});
+
 app.get('/', (req, res) => {
   res.send('Circlo API Server');
 });

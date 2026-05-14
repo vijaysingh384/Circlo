@@ -1,0 +1,28 @@
+# Files to ignore during Render deployment
+
+# Development files
+*.md
+!README.md
+!DEPLOYMENT.md
+
+# Local environment files
+.env.local
+.env.development
+
+# Editor files
+.vscode/
+.idea/
+
+# Test files
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+__tests__/
+
+# Documentation
+docs/
+
+# Git files
+.git/
+.gitignore
