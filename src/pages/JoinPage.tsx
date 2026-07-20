@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { api } from '../lib/api';
+import { api } from '../services/api';
 import { setSessionToken, generateToken } from '../lib/tokens';
 
 export function JoinPage() {
@@ -12,12 +12,6 @@ export function JoinPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const code = searchParams.get('code');
-    if (code) {
-      setJoinCode(code.toUpperCase());
-    }
-  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

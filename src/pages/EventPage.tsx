@@ -1,17 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { io, Socket } from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { getHostToken, getSessionToken } from '../lib/tokens';
 import { copyToClipboard } from '../utils/clipboard';
-import { api } from '../lib/api';
+import { api } from '../services/api';
 import { downloadBlob } from '../utils/download';
 import type { Event, Photo } from '../types';
 
 // Components
-import { EventHeader } from '../components/EventHeader';
-import { QRCodeModal } from '../components/QRCodeModal';
-import { UploadSection } from '../components/UploadSection';
-import { PhotoGallery } from '../components/PhotoGallery';
+import { EventHeader } from '../components/event/EventHeader';
+import { QRCodeModal } from '../components/event/QRCodeModal';
+import { UploadSection } from '../components/event/UploadSection';
+import { PhotoGallery } from '../components/event/PhotoGallery';
 
 const SOCKET_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
@@ -28,10 +28,10 @@ export function EventPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [onlineUsers, setOnlineUsers] = useState(0);
+
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const socketRef = useRef<Socket | null>(null);
-  const isInitializedRef = useRef(false);
+
   
   // Tokens
   const hostToken = eventId ? getHostToken(eventId) : null;
@@ -63,16 +63,11 @@ export function EventPage() {
 
   // Socket.IO connection
   useEffect(() => {
-    if (!eventId || isInitializedRef.current) return;
+   if(!eventId) return;
 
-    isInitializedRef.current = true;
+   const socket = io(SOCKET_URL);
 
-    const socket = io(SOCKET_URL, {
-      transports: ['websocket', 'polling'],
-      reconnection: true,
-    });
 
-    socketRef.current = socket;
 
     socket.on('connect', () => {
       socket.emit('join:event', { eventId, userName: userName || 'Anonymous' });
@@ -99,7 +94,6 @@ export function EventPage() {
     });
 
     return () => {
-      isInitializedRef.current = false;
       if (socket) {
         socket.emit('leave:event', { eventId });
         socket.disconnect();
@@ -113,25 +107,19 @@ export function EventPage() {
     if (!files.length || !eventId || !userName.trim()) return;
 
     setUploading(true);
-    setUploadProgress(0);
 
     const token = sessionToken || crypto.randomUUID();
 
     try {
-      // Notify upload started
-      if (socketRef.current) {
-        socketRef.current.emit('upload:started', {
-          eventId,
-          userName: userName.trim(),
-          fileCount: files.length,
-        });
-      }
-
       // Upload each file
-      for (let i = 0; i < files.length; i++) {
-        await api.uploadPhoto(eventId, files[i], userName.trim(), token);
-        setUploadProgress(Math.round(((i + 1) / files.length) * 100));
-      }
+     for (const file of files) {
+    await api.uploadPhoto(
+        eventId,
+        file,
+        userName,
+        token
+    );
+}
 
       // Clear input
       if (fileInputRef.current) {

@@ -32,7 +32,7 @@ Circlo is a simple, real-time photo sharing application for events. No accounts,
 - **Socket.IO** - Real-time WebSocket server
 - **Multer** - File upload handling
 - **Sharp** - Image optimization and thumbnail generation
-- **Cloudinary** - Cloud photo storage
+- **Cloudinary** - Cloud photo storage (required)
 - **Archiver** - ZIP file generation
 
 ## 📁 Project Structure
