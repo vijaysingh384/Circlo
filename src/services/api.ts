@@ -84,7 +84,8 @@ class ApiClient {
     sessionToken: string | null,
     hostToken: string | null
   ){
-    const headers = {};
+    const headers : Record<string , string> = {};
+    
     if (sessionToken) headers['x-session-token'] = sessionToken;
     if (hostToken) headers['x-host-token'] = hostToken;
 

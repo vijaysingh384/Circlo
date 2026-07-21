@@ -1,4 +1,4 @@
-import type { Photo } from '../types';
+import type { Photo } from '@/types';
 
 interface PhotoGalleryProps {
   photos: Photo[];
